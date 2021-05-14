@@ -47,8 +47,5 @@
     <ClInclude Include="CGraphe.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
-    <ClInclude Include="CGrapheOperation.h">
-      <Filter>Fichiers sources</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
