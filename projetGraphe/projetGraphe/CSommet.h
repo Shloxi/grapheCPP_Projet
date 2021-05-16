@@ -7,23 +7,38 @@ class CSommet {
 
 private:
 	int eIdSommet; // Liste de sommets
-	CArc** cArcArrivant; // Liste des arcs arrivants
-	CArc** cArcPartant; // Liste des arcs partants
+	int eSizeDispoArrivant; // Liste des arcs dispo pour arrivant
+	int eSizeDispoPartant; // Liste des arcs dispo pour partant
+	CArc* cArcArrivant; // Liste des arcs arrivants
+	CArc* cArcPartant; // Liste des arcs partants
+
+	// Accessors en prive pour des raisons d'allocation
+	void setArcArrivant(CArc* liste);
+	void setArcPartant(CArc* liste);
+	void setSizeDispoArrivant(int sizeDispoArrivant);
+	void setSizeDispoPartant(int sizeDispoPartant);
 
 public:
 	// Constructors
 	CSommet(); // Par défaut
-	CSommet(int eIdSommet, CArc** listeArrivant, CArc** listePartant);
+	CSommet(int eId, int eSizeA, int eSizeP, CArc* listeArrivant, CArc* listePartant);
 	CSommet(const CSommet& m); // Par recopie
 	~CSommet(); // Destructeur
 
-	//Accesseurs
+	//Accessors
 	int getIdSommet();
-	void setIdSommet(int eIdSommet);
-	CArc** getArcArrivant();
-	void setArcArrivant(CArc** liste);
-	CArc** getArcPartant();
-	void setArcPartant(CArc** liste);
+	void setIdSommet(int idSommet);
+	int getSizeDispoArrivant();
+	int getSizeDispoPartant();
+	CArc* getArcArrivant();
+	CArc* getArcPartant();
+	
+
+	//Methods
+	void changeListeArrivant(CArc* liste, int sizeDispoArrivant);
+	void changeListePartant(CArc* liste, int sizeDispoPartant);
+	void allocArrivant();
+	void allocPartant();
 };
 
 #endif // !CSommet_h

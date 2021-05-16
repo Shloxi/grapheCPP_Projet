@@ -6,24 +6,27 @@ using namespace std;
 class CGraphe {
 
 private:
-	CSommet ** cSommetListe; // Liste de sommets
+	int eSizeListe; // Taille de la liste sommets
+	CSommet* cSommetListe; // Liste de sommets
 
+	// Accessors en prive pour des raisons d'allocation
+	void setSommetListe(CSommet* liste);
+	void setSizeListe(int size);
 public:
 	// Constructors
 	CGraphe(); // Par défaut
-	CGraphe(CSommet** liste);
+	CGraphe(int sizeListe, CSommet* liste);
 	CGraphe(const CGraphe& m); // Par recopie
-	/*
-	Problèmes à identifier :	-) Le fichier n'existe pas
-								-) Le fichier est vide
-	*/
 	CGraphe(const char* filename) throw();
 	~CGraphe(); // Destructeur
 
-	//Accesseurs
-	
+	//Accessors
+	CSommet* getSommetListe();
+	int getSizeListe();
 
 	// Methods
+	void modifierListe(CSommet* liste, int size);
+	void allocListe();
 	ostream& afficherGraphe(ostream& os) const throw();
 };
 

@@ -10,15 +10,12 @@ private:
 public:
 	// Constructors
 	CArc(); // Par défaut
-	CArc(int eIdDest);
+	CArc(int eId);
 	CArc(const CArc& m); // Par recopie
-	~CArc(); // Destructeur
 
-	//Accesseurs
+	//Accessors
 	int getIdDest();
-	void setIdDest(int eIdDest);
-
-	// Methods
+	void setIdDest(int eId);
 };
 
 #endif // !CArc_h

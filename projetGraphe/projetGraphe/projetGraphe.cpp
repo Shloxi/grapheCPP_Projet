@@ -4,7 +4,6 @@
 #include <iostream>
 #include "CGraphe.h"
 #include "CException.h"
-#include "CGraphe.cpp"
 
 int main()
 {
