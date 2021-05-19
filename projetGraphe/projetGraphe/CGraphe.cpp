@@ -12,16 +12,19 @@ using namespace std;
 ##################
 */
 CGraphe::CGraphe() {
-	eSizeListe = -1;
+	eSize = 0;
+	eSizeDispo = 0;
 	cSommetListe = NULL;
 }
 
-CGraphe::CGraphe(int sizeListe, CSommet* liste) {
-	eSizeListe = sizeListe;
+CGraphe::CGraphe(int size, CSommet** liste) {
+	eSize = size;
 
-	cSommetListe = (CSommet*)malloc(sizeof(CSommet) * eSizeListe);
+	eSizeDispo = (eSize / 5 + 1) * 5;
+
+	cSommetListe = (CSommet**)malloc(sizeof(CSommet*) * eSizeDispo);
 	if (cSommetListe) {
-		for (int i = 0; i < eSizeListe; ++i) {
+		for (int i = 0; i < eSize - 1; ++i) {
 			cSommetListe[i] = liste[i];
 		}
 	}
@@ -31,11 +34,12 @@ CGraphe::CGraphe(int sizeListe, CSommet* liste) {
 }
 
 CGraphe::CGraphe(const CGraphe& m) {
-	eSizeListe = m.eSizeListe;
+	eSize = m.eSize;
+	eSizeDispo = m.eSizeDispo;
 
-	cSommetListe = (CSommet*)malloc(sizeof(CSommet) * eSizeListe);
+	cSommetListe = (CSommet**)malloc(sizeof(CSommet*) * eSizeDispo);
 	if (cSommetListe) {
-		for (int i = 0; i < eSizeListe; ++i) {
+		for (int i = 0; i < eSize - 1; ++i) {
 			cSommetListe[i] = m.cSommetListe[i];
 		}
 	}
@@ -50,22 +54,20 @@ CGraphe::~CGraphe() {
 	}
 }
 
+
 /*
 ##################
 	ACCESSORS
 ##################
 */
-CSommet* CGraphe::getSommetListe() {
+CSommet** CGraphe::getSommetListe() {
 	return cSommetListe;
 }
 
-void CGraphe::setSommetListe(CSommet* liste) {
+void CGraphe::setSommetListe(CSommet** liste) {
+	cSommetListe = (CSommet**)malloc(sizeof(CSommet*) * eSizeDispo);
 	if (cSommetListe) {
-		free(cSommetListe);
-	}
-	cSommetListe = (CSommet*)malloc(sizeof(CSommet) * eSizeListe);
-	if (cSommetListe) {
-		for (int i = 0; i < eSizeListe; ++i) {
+		for (int i = 0; i < eSize; ++i) {
 			cSommetListe[i] = liste[i];
 		}
 	}
@@ -74,10 +76,33 @@ void CGraphe::setSommetListe(CSommet* liste) {
 	}
 }
 
-int CGraphe::getSizeListe() {
-	return eSizeListe;
+int CGraphe::getSize() {
+	return eSize;
 }
 
-void CGraphe::setSizeListe(int size) {
-	eSizeListe = size;
+void CGraphe::setSize(int size) {
+	eSize = size;
+}
+
+int CGraphe::getSizeDispo() {
+	return eSizeDispo;
+}
+
+void CGraphe::setSizeDispo(int sizeDispo) {
+	eSizeDispo = sizeDispo;
+}
+
+
+/*
+##################
+	METHODS
+##################
+*/
+void CGraphe::reallocListe() {
+	eSizeDispo += 5;
+	CSommet** newCSommetListe = (CSommet**)realloc(cSommetListe, sizeof(CSommet*) * eSizeDispo);
+	if (newCSommetListe == NULL) {
+		// Erreur
+	}
+	setSommetListe(newCSommetListe);
 }

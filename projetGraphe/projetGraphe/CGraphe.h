@@ -6,27 +6,30 @@ using namespace std;
 class CGraphe {
 
 private:
-	int eSizeListe; // Taille de la liste sommets
-	CSommet* cSommetListe; // Liste de sommets
+	int eSize; // Taille de la liste sommets
+	int eSizeDispo; // Taille dispo de la liste sommets
+	CSommet** cSommetListe; // Liste de sommets
 
-	// Accessors en prive pour des raisons d'allocation
-	void setSommetListe(CSommet* liste);
-	void setSizeListe(int size);
+	// Accesseurs et methodes en prive pour des raisons de sécurité
+	void setSommetListe(CSommet** liste);
+	void setSize(int size);
+	void setSizeDispo(int sizeDispo);
+	void reallocListe(); // Reallocation de liste si eSizeDispo = eSize
 public:
 	// Constructors
 	CGraphe(); // Par défaut
-	CGraphe(int sizeListe, CSommet* liste);
+	CGraphe(int size, CSommet** liste);
 	CGraphe(const CGraphe& m); // Par recopie
 	CGraphe(const char* filename) throw();
 	~CGraphe(); // Destructeur
 
 	//Accessors
-	CSommet* getSommetListe();
-	int getSizeListe();
+	CSommet** getSommetListe();
+	int getSize();
+	int getSizeDispo();
 
 	// Methods
-	void modifierListe(CSommet* liste, int size);
-	void allocListe();
+	void modifierListe(CSommet** liste, int size);
 	ostream& afficherGraphe(ostream& os) const throw();
 };
 
