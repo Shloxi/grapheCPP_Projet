@@ -24,7 +24,7 @@ CGraphe::CGraphe(int size, CSommet** liste) {
 
 	cSommetListe = (CSommet**)malloc(sizeof(CSommet*) * eSizeDispo);
 	if (cSommetListe) {
-		for (int i = 0; i < eSize - 1; ++i) {
+		for (int i = 0; i < eSize; ++i) {
 			cSommetListe[i] = liste[i];
 		}
 	}
@@ -39,7 +39,7 @@ CGraphe::CGraphe(const CGraphe& m) {
 
 	cSommetListe = (CSommet**)malloc(sizeof(CSommet*) * eSizeDispo);
 	if (cSommetListe) {
-		for (int i = 0; i < eSize - 1; ++i) {
+		for (int i = 0; i < eSize; ++i) {
 			cSommetListe[i] = m.cSommetListe[i];
 		}
 	}
@@ -48,11 +48,15 @@ CGraphe::CGraphe(const CGraphe& m) {
 	}
 }
 
+/*
 CGraphe::~CGraphe() {
 	if (cSommetListe) {
-		free(cSommetListe);
+		for (int i = 0; i < eSizeDispo; ++i) {
+			delete[] cSommetListe[i];
+		}
+		delete[] cSommetListe;
 	}
-}
+} */
 
 
 /*
@@ -60,7 +64,7 @@ CGraphe::~CGraphe() {
 	ACCESSORS
 ##################
 */
-CSommet** CGraphe::getSommetListe() {
+CSommet** CGraphe::getSommetListe() const {
 	return cSommetListe;
 }
 
@@ -76,7 +80,7 @@ void CGraphe::setSommetListe(CSommet** liste) {
 	}
 }
 
-int CGraphe::getSize() {
+int CGraphe::getSize() const {
 	return eSize;
 }
 
@@ -84,7 +88,7 @@ void CGraphe::setSize(int size) {
 	eSize = size;
 }
 
-int CGraphe::getSizeDispo() {
+int CGraphe::getSizeDispo() const {
 	return eSizeDispo;
 }
 
@@ -100,9 +104,51 @@ void CGraphe::setSizeDispo(int sizeDispo) {
 */
 void CGraphe::reallocListe() {
 	eSizeDispo += 5;
-	CSommet** newCSommetListe = (CSommet**)realloc(cSommetListe, sizeof(CSommet*) * eSizeDispo);
+	CSommet** newCSommetListe;
+	if (cSommetListe) {
+		newCSommetListe = (CSommet**)realloc(cSommetListe, sizeof(CSommet*) * eSizeDispo);
+	}
+	else {
+		newCSommetListe = (CSommet**)malloc(sizeof(CSommet*) * eSizeDispo);
+	}
 	if (newCSommetListe == NULL) {
 		// Erreur
 	}
 	setSommetListe(newCSommetListe);
+}
+
+void CGraphe::ajouterListe(CSommet * sommet) {
+	if (eSize + 1 >= eSizeDispo) {
+		reallocListe();
+	}
+	eSize += 1;
+	cSommetListe[eSize - 1] = sommet;
+}
+
+void CGraphe::supprimerListe(int indiceSommet) {
+	if (indiceSommet >= eSize) {
+		// Erreur
+	}
+	for (int i = indiceSommet + 1; i < eSize; ++i) {
+		cSommetListe[i - 1] = cSommetListe[i];
+	}
+	eSize -= 1;
+}
+
+ostream& CGraphe::display(ostream& os) const {
+	if (eSize == 0) {
+		//Erreur
+	}
+	os << "Presentation du graphe :" << endl;
+	os << "------------------------------" << endl;
+	for (int i = 0; i < eSize; ++i) {
+		os << *(cSommetListe[i]);
+		os << "------------------------------" << endl;
+	}
+	return os;
+}
+
+ostream& operator<<(ostream& os, CGraphe const G) {
+	G.display(os);
+	return os;
 }

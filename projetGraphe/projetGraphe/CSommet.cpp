@@ -95,6 +95,7 @@ CSommet::CSommet(const CSommet& m) {
 	}
 }
 
+/*
 CSommet::~CSommet() {
 	if (cArcArrivant) {
 		for (int i = 0; i < eSizeDispoArrivant; ++i) {
@@ -108,7 +109,7 @@ CSommet::~CSommet() {
 		}
 		delete[] cArcPartant;
 	}
-}
+} */
 
 
 /*
@@ -116,7 +117,7 @@ CSommet::~CSommet() {
 	ACCESSORS
 ##################
 */
-int CSommet::getIdSommet() {
+int CSommet::getIdSommet() const {
 	return eIdSommet;
 }
 
@@ -126,7 +127,7 @@ void CSommet::setIdSommet(int idSommet) {
 
 
 // Accessors Arrivant
-int CSommet::getSizeDispoArrivant() {
+int CSommet::getSizeDispoArrivant() const {
 	return eSizeDispoArrivant;
 }
 
@@ -134,7 +135,7 @@ void CSommet::setSizeDispoArrivant(int sizeDispoArrivant) {
 	eSizeDispoArrivant = sizeDispoArrivant;
 }
 
-int CSommet::getSizeArrivant() {
+int CSommet::getSizeArrivant() const {
 	return eSizeArrivant;
 }
 
@@ -142,7 +143,7 @@ void CSommet::setSizeArrivant(int sizeArrivant) {
 	eSizeArrivant = sizeArrivant;
 }
 
-CArc** CSommet::getArcArrivant() {
+CArc** CSommet::getArcArrivant() const {
 	return cArcArrivant;
 }
 
@@ -160,7 +161,7 @@ void CSommet::setArcArrivant(CArc** liste) {
 
 
 // Accesseurs Partant
-int CSommet::getSizeDispoPartant() {
+int CSommet::getSizeDispoPartant() const {
 	return eSizeDispoPartant;
 }
 
@@ -168,7 +169,7 @@ void CSommet::setSizeDispoPartant(int sizeDispoPartant) {
 	eSizeDispoPartant = sizeDispoPartant;
 }
 
-int CSommet::getSizePartant() {
+int CSommet::getSizePartant() const {
 	return eSizePartant;
 }
 
@@ -176,7 +177,7 @@ void CSommet::setSizePartant(int sizePartant) {
 	eSizePartant = sizePartant;
 }
 
-CArc** CSommet::getArcPartant() {
+CArc** CSommet::getArcPartant() const {
 	return cArcPartant;
 }
 
@@ -242,7 +243,7 @@ void CSommet::reallocArrivant() {
 	setArcArrivant(newCArcArrivant);
 }
 
-void CSommet::displayArcArrivant() {
+void CSommet::displayArcArrivant() const {
 	if (eSizeArrivant == 0) {
 		//Erreur
 	}
@@ -301,7 +302,7 @@ void CSommet::reallocPartant() {
 	setArcPartant(newCArcPartant);
 }
 
-void CSommet::displayArcPartant() {
+void CSommet::displayArcPartant() const {
 	if (eSizePartant == 0) {
 		//Erreur
 	}
@@ -312,4 +313,27 @@ void CSommet::displayArcPartant() {
 		}
 		cout << endl;
 	}
+}
+ostream& CSommet::display(ostream& os) const{
+	if (eIdSommet == -1) {
+		// Erreur
+	}
+	else {
+		os << "Sommet " << eIdSommet << ":" << endl;
+		if (eSizeArrivant == 0 && eSizePartant == 0) {
+			os << "Aucun Arc Partant ou Arrivant !" << endl;
+		}
+		else {
+			displayArcArrivant();
+			displayArcPartant();
+		}
+	}
+	return os;
+}
+
+
+ostream& operator<<(ostream& os, CSommet const S) {
+	S.display(os);
+	return os;
+	
 }

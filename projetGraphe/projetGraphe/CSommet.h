@@ -33,19 +33,19 @@ public:
 	CSommet(int idSommet);
 	CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** listePartant);
 	CSommet(const CSommet& m); // Par recopie
-	~CSommet(); // Destructeur
+	//~CSommet() throw(); // Destructeur
 
 	//Accesseurs
-	int getIdSommet();
+	int getIdSommet() const;
 	void setIdSommet(int idSommet);
 
-	int getSizeDispoArrivant();
-	int getSizeArrivant();
-	CArc** getArcArrivant();
+	int getSizeDispoArrivant() const;
+	int getSizeArrivant() const;
+	CArc** getArcArrivant() const;
 
-	int getSizeDispoPartant();
-	int getSizePartant();
-	CArc** getArcPartant();
+	int getSizeDispoPartant() const;
+	int getSizePartant() const;
+	CArc** getArcPartant() const;
 	
 
 	//Methodes
@@ -53,14 +53,17 @@ public:
 	void supprimerArcArrivant(int indiceArc);
 	void modifierArcArrivant(int indiceArc); // Modification d'un arc = Changement de liste
 	void changeListeArrivant(CArc** liste, int sizeArrivant);
-	void displayArcArrivant();
+	void displayArcArrivant() const;
 
 	void ajouterArcPartant(CArc* arc);
 	void supprimerArcPartant(int indiceArc);
 	void modifierArcPartant(int indiceArc); // Modification d'un arc = Changement de liste
 	void changeListePartant(CArc** liste, int sizePartant);
-	void displayArcPartant();
+	void displayArcPartant() const;
+	ostream& display(ostream& os) const;
 };
+
+ostream& operator<<(ostream& os, CSommet const S);
 
 #endif // !CSommet_h
 

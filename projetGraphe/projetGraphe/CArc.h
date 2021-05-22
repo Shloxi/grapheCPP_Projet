@@ -8,15 +8,20 @@ private:
 	int eIdDest; // Id du sommet de destination
 
 public:
-	// Constructors
+	// Constructeurs
 	CArc(); // Par défaut
 	CArc(int eId);
 	CArc(const CArc& m); // Par recopie
 
-	//Accessors
-	int getIdDest();
+	// Accesseurs
+	int getIdDest() const;
 	void setIdDest(int eId);
+
+	// Methodes
+	ostream& display(ostream& os) const;
 };
+
+ostream& operator<<(ostream& os, CArc const A);
 
 #endif // !CArc_h
 

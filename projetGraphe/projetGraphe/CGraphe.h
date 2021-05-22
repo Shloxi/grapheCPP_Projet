@@ -21,16 +21,18 @@ public:
 	CGraphe(int size, CSommet** liste);
 	CGraphe(const CGraphe& m); // Par recopie
 	CGraphe(const char* filename) throw();
-	~CGraphe(); // Destructeur
+	//~CGraphe(); // Destructeur
 
 	//Accessors
-	CSommet** getSommetListe();
-	int getSize();
-	int getSizeDispo();
+	CSommet** getSommetListe() const;
+	int getSize() const;
+	int getSizeDispo() const;
 
 	// Methods
+	void ajouterListe(CSommet* sommet);
 	void modifierListe(CSommet** liste, int size);
-	ostream& afficherGraphe(ostream& os) const throw();
+	void supprimerListe(int indiceSommet);
+	ostream& display(ostream& os) const;
 };
 
 // Surcharge pour afficher
