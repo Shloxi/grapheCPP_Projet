@@ -15,6 +15,15 @@ int main()
     sommet1->ajouterArcPartant(arc2);
     sommet1->ajouterArcPartant(arc1);
     sommet1->supprimerArcPartant(0);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
+    sommet1->ajouterArcPartant(arc1);
     sommet1->ajouterArcArrivant(arc3);
 
     CSommet* sommet2 = new CSommet(2);
@@ -27,10 +36,10 @@ int main()
     sommet4->ajouterArcPartant(arc3);
 
     CGraphe* graphe = new CGraphe();
-    graphe->ajouterListe(sommet1);
-    graphe->ajouterListe(sommet2);
-    graphe->ajouterListe(sommet3);
-    graphe->ajouterListe(sommet4);
+    graphe->ajouterSommet(sommet1);
+    graphe->ajouterSommet(sommet2);
+    graphe->ajouterSommet(sommet3);
+    graphe->ajouterSommet(sommet4);
 
     std::cout << *graphe << std::endl;
     std::cout << "Hello World!\n";

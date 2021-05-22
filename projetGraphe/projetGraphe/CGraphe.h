@@ -10,11 +10,11 @@ private:
 	int eSizeDispo; // Taille dispo de la liste sommets
 	CSommet** cSommetListe; // Liste de sommets
 
-	// Accesseurs et methodes en prive pour des raisons de sécurité
+	// Accesseurs et methodes en prive pour des raisons de sécurité de gestion de liste
 	void setSommetListe(CSommet** liste);
 	void setSize(int size);
 	void setSizeDispo(int sizeDispo);
-	void reallocListe(); // Reallocation de liste si eSizeDispo = eSize
+
 public:
 	// Constructors
 	CGraphe(); // Par défaut
@@ -29,10 +29,9 @@ public:
 	int getSizeDispo() const;
 
 	// Methods
-	void ajouterListe(CSommet* sommet);
-	void modifierListe(CSommet** liste, int size);
-	void supprimerListe(int indiceSommet);
-	ostream& display(ostream& os) const;
+	void ajouterSommet(CSommet* sommet);
+	void supprimerSommet(int indiceSommet);
+	void modifierSommet(CSommet** liste, int size);
 };
 
 // Surcharge pour afficher

@@ -16,16 +16,14 @@ private:
 	int eSizePartant; // Place utilisé pour Partant
 	CArc** cArcPartant; // Liste des arcs partants
 
-	// Accesseurs et methodes en prive pour des raisons de sécurité
+	// Accesseurs et methodes en prive pour des raisons de sécurité de gestion de liste
 	void setArcArrivant(CArc** liste);
 	void setSizeDispoArrivant(int sizeDispoArrivant);
 	void setSizeArrivant(int sizeArrivant);
-	void reallocArrivant(); // Reallocation de Arrivant si eSizeDispoArrivant = eSizeArrivant
 
 	void setArcPartant(CArc** liste);
 	void setSizeDispoPartant(int sizeDispoPartant);
 	void setSizePartant(int sizePartant);
-	void reallocPartant(); // Reallocation de Partant si eSizeDispoPartant = eSizePartant
 
 public:
 	// Constructeurs
@@ -52,15 +50,10 @@ public:
 	void ajouterArcArrivant(CArc* arc);
 	void supprimerArcArrivant(int indiceArc);
 	void modifierArcArrivant(int indiceArc); // Modification d'un arc = Changement de liste
-	void changeListeArrivant(CArc** liste, int sizeArrivant);
-	void displayArcArrivant() const;
 
 	void ajouterArcPartant(CArc* arc);
 	void supprimerArcPartant(int indiceArc);
 	void modifierArcPartant(int indiceArc); // Modification d'un arc = Changement de liste
-	void changeListePartant(CArc** liste, int sizePartant);
-	void displayArcPartant() const;
-	ostream& display(ostream& os) const;
 };
 
 ostream& operator<<(ostream& os, CSommet const S);

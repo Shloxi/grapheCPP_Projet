@@ -24,7 +24,7 @@ CArc::CArc(const CArc& m) {
 
 /*
 ##################
-	ACCESSORS
+	ACCESSEURS
 ##################
 */
 int CArc::getIdDest() const {
@@ -35,17 +35,12 @@ void CArc::setIdDest(int eId) {
 	eIdDest = eId;
 }
 
-ostream& CArc::display(ostream& os) const {
-	if (eIdDest == -1) {
+ostream& operator<<(ostream& os, CArc const A) {
+	if (A.getIdDest() == -1) {
 		//Erreur
 	}
 	else {
-		os << eIdDest << " ";
+		os << A.getIdDest() << " ";
 	}
-	return os;
-}
-
-ostream& operator<<(ostream& os, CArc const A) {
-	A.display(os);
 	return os;
 }

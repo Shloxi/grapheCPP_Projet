@@ -3,6 +3,7 @@
 #include <fstream>
 #include "CSommet.h"
 #include "CException.h"
+#include "CListeOperation.cpp"
 using namespace std;
 
 
@@ -41,28 +42,12 @@ CSommet::CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** l
 	eSizeArrivant = eSizeA;
 	eSizeDispoArrivant = (eSizeArrivant / 5 + 1) * 5;
 
-	cArcArrivant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoArrivant);
-	if (cArcArrivant) {
-		for (int i = 0; i < eSizeArrivant; ++i) {
-			cArcArrivant[i] = listeArrivant[i];
-		}
-	}
-	else {
-		//Erreur
-	}
+	cArcArrivant = realloc(listeArrivant, &eSizeDispoArrivant);
 
 	eSizePartant = eSizeP;
 	eSizeDispoPartant = (eSizePartant / 5 + 1) * 5;
 
-	cArcPartant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoPartant);
-	if (cArcPartant) {
-		for (int i = 0; i < eSizeArrivant; ++i) {
-			cArcPartant[i] = listePartant[i];
-		}
-	}
-	else {
-		//Erreur
-	}
+	cArcPartant = realloc(listePartant, &eSizeDispoPartant);
 }	
 
 CSommet::CSommet(const CSommet& m) {
@@ -71,28 +56,12 @@ CSommet::CSommet(const CSommet& m) {
 	eSizeArrivant = m.eSizeArrivant;
 	eSizeDispoArrivant = m.eSizeDispoArrivant;
 
-	cArcArrivant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoArrivant);
-	if (cArcArrivant) {
-		for (int i = 0; i < eSizeArrivant; ++i) {
-			cArcArrivant[i] = m.cArcArrivant[i];
-		}
-	}
-	else {
-		//Erreur
-	}
+	cArcArrivant = realloc(m.cArcArrivant, &eSizeDispoArrivant);
 
 	eSizePartant = m.eSizePartant;
 	eSizeDispoPartant = m.eSizeDispoPartant;
 
-	cArcPartant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoPartant);
-	if (cArcPartant) {
-		for (int i = 0; i < eSizePartant; ++i) {
-			cArcPartant[i] = m.cArcPartant[i];
-		}
-	}
-	else {
-		//Erreur
-	}
+	cArcPartant = realloc(m.cArcPartant, &eSizeDispoPartant);
 }
 
 /*
@@ -114,7 +83,7 @@ CSommet::~CSommet() {
 
 /*
 ##################
-	ACCESSORS
+	ACCESSEURS
 ##################
 */
 int CSommet::getIdSommet() const {
@@ -126,7 +95,7 @@ void CSommet::setIdSommet(int idSommet) {
 }
 
 
-// Accessors Arrivant
+// Accesseurs Arrivant
 int CSommet::getSizeDispoArrivant() const {
 	return eSizeDispoArrivant;
 }
@@ -148,15 +117,7 @@ CArc** CSommet::getArcArrivant() const {
 }
 
 void CSommet::setArcArrivant(CArc** liste) {
-	cArcArrivant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoArrivant);
-	if (cArcArrivant) {
-		for (int i = 0; i < eSizeArrivant; ++i) {
-			cArcArrivant[i] = liste[i];
-		}
-	}
-	else {
-		//Erreur
-	}
+	cArcArrivant = liste;
 }
 
 
@@ -182,15 +143,7 @@ CArc** CSommet::getArcPartant() const {
 }
 
 void CSommet::setArcPartant(CArc** liste) {
-	cArcPartant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoPartant);
-	if (cArcPartant) {
-		for (int i = 0; i < eSizePartant; ++i) {
-			cArcPartant[i] = liste[i];
-		}
-	}
-	else {
-		// Erreur
-	}
+	cArcPartant = liste;
 }
 
 /*
@@ -200,22 +153,12 @@ void CSommet::setArcPartant(CArc** liste) {
 */
 // Arrivant
 void CSommet::ajouterArcArrivant(CArc* arc) {
-	if (eSizeArrivant + 1 >= eSizeDispoArrivant) {
-		reallocArrivant();
-	}
-	eSizeArrivant += 1;
-	cArcArrivant[eSizeArrivant - 1] = arc;
+	CArc** liste = ajouterListe(cArcArrivant, &eSizeDispoArrivant, &eSizeArrivant, arc);
+	setArcArrivant(liste);
 }
 
 void CSommet::supprimerArcArrivant(int indiceArc) {
-	if (indiceArc >= eSizeArrivant) {
-		// Erreur
-	}
-
-	for (int i = indiceArc+1; i < eSizeArrivant; ++i) {
-		cArcArrivant[i - 1] = cArcArrivant[i];
-	}
-	eSizeArrivant -= 1;
+	supprimerListe(cArcArrivant, indiceArc, &eSizeArrivant);
 }
 
 void CSommet::modifierArcArrivant(int indiceArc) {
@@ -223,58 +166,15 @@ void CSommet::modifierArcArrivant(int indiceArc) {
 	supprimerArcArrivant(indiceArc);
 }
 
-void CSommet::changeListeArrivant(CArc** liste, int sizeArrivant) {
-	eSizeArrivant = sizeArrivant;
-	setArcArrivant(liste);
-}
-
-void CSommet::reallocArrivant() {
-	eSizeDispoArrivant += 5;
-	CArc** newCArcArrivant;
-	if (cArcArrivant) {
-		newCArcArrivant = (CArc**)realloc(cArcArrivant, sizeof(CArc*) * eSizeDispoArrivant);
-	}
-	else {
-		newCArcArrivant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoArrivant);
-	}
-	if (newCArcArrivant == NULL) {
-		// Erreur
-	}
-	setArcArrivant(newCArcArrivant);
-}
-
-void CSommet::displayArcArrivant() const {
-	if (eSizeArrivant == 0) {
-		//Erreur
-	}
-	else {
-		cout << "Liste Arc Arrivant : ";
-		for (int i = 0; i < eSizeArrivant; ++i) {
-			cout << cArcArrivant[i]->getIdDest() << " ";
-		}
-		cout << endl;
-	}
-}
-
 
 // Partant
 void CSommet::ajouterArcPartant(CArc* arc) {
-	if (eSizePartant + 1 >= eSizeDispoPartant) {
-		reallocPartant();
-	}
-	eSizePartant += 1;
-	cArcPartant[eSizePartant-1] = arc;
+	CArc** liste = ajouterListe(cArcPartant, &eSizeDispoPartant, &eSizePartant, arc);
+	setArcPartant(liste);
 }
 
 void CSommet::supprimerArcPartant(int indiceArc) {
-	if (indiceArc >= eSizePartant) {
-		// Erreur
-	}
-
-	for (int i = indiceArc + 1; i < eSizePartant; ++i) {
-		cArcPartant[i - 1] = cArcPartant[i];
-	}
-	eSizePartant -= 1;
+	supprimerListe(cArcPartant, indiceArc, &eSizePartant);
 }
 
 void CSommet::modifierArcPartant(int indiceArc) {
@@ -282,58 +182,21 @@ void CSommet::modifierArcPartant(int indiceArc) {
 	supprimerArcPartant(indiceArc);
 }
 
-void CSommet::changeListePartant(CArc** liste, int sizePartant) {
-	eSizePartant = sizePartant;
-	setArcPartant(liste);
-}
 
-void CSommet::reallocPartant() {
-	eSizeDispoPartant += 5;
-	CArc** newCArcPartant;
-	if (cArcPartant) {
-		newCArcPartant = (CArc**)realloc(cArcPartant, sizeof(CArc*) * eSizeDispoPartant);
-	}
-	else {
-		newCArcPartant = (CArc**)malloc(sizeof(CArc*) * eSizeDispoPartant);
-	}
-	if (newCArcPartant == NULL) {
-		// Erreur
-	}
-	setArcPartant(newCArcPartant);
-}
-
-void CSommet::displayArcPartant() const {
-	if (eSizePartant == 0) {
-		//Erreur
-	}
-	else {
-		cout << "Liste Arc Partant : ";
-		for (int i = 0; i < eSizePartant; ++i) {
-			cout << cArcPartant[i]->getIdDest() << " ";
-		}
-		cout << endl;
-	}
-}
-ostream& CSommet::display(ostream& os) const{
-	if (eIdSommet == -1) {
+ostream& operator<<(ostream& os, CSommet const S) {
+	if (S.getIdSommet() == -1) {
 		// Erreur
 	}
 	else {
-		os << "Sommet " << eIdSommet << ":" << endl;
-		if (eSizeArrivant == 0 && eSizePartant == 0) {
+		os << "-------------------------------------" << endl;
+		os << "Sommet " << S.getIdSommet() << ":" << endl;
+		if (S.getSizeArrivant() == 0 && S.getSizePartant() == 0) {
 			os << "Aucun Arc Partant ou Arrivant !" << endl;
 		}
 		else {
-			displayArcArrivant();
-			displayArcPartant();
+			afficherListe(S.getArcArrivant(), S.getSizeArrivant(), "Liste Arc Arrivant : ");
+			afficherListe(S.getArcPartant(), S.getSizePartant(), "Liste Arc Partant : ");
 		}
 	}
 	return os;
-}
-
-
-ostream& operator<<(ostream& os, CSommet const S) {
-	S.display(os);
-	return os;
-	
 }
