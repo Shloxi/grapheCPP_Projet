@@ -54,7 +54,7 @@ CSommet** CGraphe::getSommetListe() const {
 }
 
 void CGraphe::setSommetListe(CSommet** liste) {
-	cSommetListe = liste
+	cSommetListe = liste;
 }
 
 int CGraphe::getSize() const {
