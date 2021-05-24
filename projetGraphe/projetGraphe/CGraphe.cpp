@@ -23,14 +23,14 @@ CGraphe::CGraphe(int size, CSommet** liste) {
 
 	eSizeDispo = (eSize / 5 + 1) * 5;
 
-	cSommetListe = realloc(liste, &eSizeDispo);
+	cSommetListe = createListeSommet(liste, eSizeDispo, eSize);
 }
 
 CGraphe::CGraphe(const CGraphe& m) {
 	eSize = m.eSize;
 	eSizeDispo = m.eSizeDispo;
 
-	cSommetListe = realloc(m.cSommetListe, &eSizeDispo);
+	cSommetListe = createListeSommet(m.cSommetListe, eSizeDispo, eSize);
 }
 
 /*
@@ -89,9 +89,28 @@ void CGraphe::supprimerSommet(int indiceSommet) {
 	supprimerListe(cSommetListe, indiceSommet, &eSize);
 }
 
+void CGraphe::modifierSommetId(int indiceSommet, int newId) {
+	cSommetListe[indiceSommet]->setIdSommet(newId);
+}
+
+void CGraphe::modifierSommetListe(CSommet** sommetListe, int size) {
+	eSizeDispo = (size / 5 + 1) * 5;
+	eSize = size;
+	cSommetListe = createListeSommet(sommetListe, eSizeDispo, eSize);
+}
+
+CSommet* CGraphe::getSommet(int idSommet) {
+	for (int i = 0; i < eSize; i++) {
+		if (idSommet == cSommetListe[i]->getIdSommet()) {
+			return cSommetListe[i];
+		}
+	}
+	throw CException(); // Sommet introuvable
+}
+
 ostream& operator<<(ostream& os, CGraphe const G) {
 	if (G.getSize() == 0) {
-		//Erreur
+		throw CException(); // liste vide
 	}
 	afficherListe(G.getSommetListe(), G.getSize(), "Presentation du graphe :\n");
 	return os;
