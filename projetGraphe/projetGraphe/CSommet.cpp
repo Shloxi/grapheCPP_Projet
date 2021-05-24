@@ -42,27 +42,29 @@ CSommet::CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** l
 	eSizeArrivant = eSizeA;
 	eSizeDispoArrivant = (eSizeArrivant / 5 + 1) * 5;
 
-	cArcArrivant = realloc(listeArrivant, &eSizeDispoArrivant);
+	cArcArrivant = createListe(listeArrivant, eSizeDispoArrivant, eSizeArrivant);
 
 	eSizePartant = eSizeP;
 	eSizeDispoPartant = (eSizePartant / 5 + 1) * 5;
 
-	cArcPartant = realloc(listePartant, &eSizeDispoPartant);
-}	
+	cArcPartant = createListe(listePartant, eSizeDispoPartant, eSizePartant);
+}
 
 CSommet::CSommet(const CSommet& m) {
+	cout << m.eIdSommet << endl;
 	eIdSommet = m.eIdSommet;
 
 	eSizeArrivant = m.eSizeArrivant;
 	eSizeDispoArrivant = m.eSizeDispoArrivant;
 
-	cArcArrivant = realloc(m.cArcArrivant, &eSizeDispoArrivant);
+	cArcArrivant = createListe(m.cArcArrivant, eSizeDispoArrivant, eSizeArrivant);
 
 	eSizePartant = m.eSizePartant;
 	eSizeDispoPartant = m.eSizeDispoPartant;
 
-	cArcPartant = realloc(m.cArcPartant, &eSizeDispoPartant);
+	cArcPartant = createListe(m.cArcPartant, eSizeDispoPartant, eSizePartant);
 }
+
 
 /*
 CSommet::~CSommet() {

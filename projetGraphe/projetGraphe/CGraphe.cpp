@@ -23,14 +23,14 @@ CGraphe::CGraphe(int size, CSommet** liste) {
 
 	eSizeDispo = (eSize / 5 + 1) * 5;
 
-	cSommetListe = realloc(liste, &eSizeDispo);
+	cSommetListe = createListe(liste, eSizeDispo, eSize);
 }
 
 CGraphe::CGraphe(const CGraphe& m) {
 	eSize = m.eSize;
 	eSizeDispo = m.eSizeDispo;
-
-	cSommetListe = realloc(m.cSommetListe, &eSizeDispo);
+	//afficherListe(m.cSommetListe, m.eSize, "Test");
+	cSommetListe = createListe(m.cSommetListe, eSizeDispo, eSize);
 }
 
 /*

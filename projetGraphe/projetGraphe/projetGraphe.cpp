@@ -1,5 +1,7 @@
 #include <iostream>
 #include "CGraphe.h"
+#include "CSommet.h"
+#include "CArc.h"
 #include "CException.h"
 
 int main()
@@ -35,11 +37,14 @@ int main()
     CSommet* sommet4 = new CSommet(4);
     sommet4->ajouterArcPartant(arc3);
 
+    
+
     CGraphe* graphe = new CGraphe();
     graphe->ajouterSommet(sommet1);
     graphe->ajouterSommet(sommet2);
     graphe->ajouterSommet(sommet3);
     graphe->ajouterSommet(sommet4);
+    //graphe->ajouterSommet(sommet5);
 
     std::cout << *graphe << std::endl;
     std::cout << "Hello World!\n";
