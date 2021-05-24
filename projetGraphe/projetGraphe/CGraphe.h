@@ -20,7 +20,7 @@ public:
 	CGraphe(); // Par défaut
 	CGraphe(int size, CSommet** liste);
 	CGraphe(const CGraphe& m); // Par recopie
-	CGraphe(const char* filename) throw();
+	//CGraphe(const char* filename) throw();
 	//~CGraphe(); // Destructeur
 
 	//Accessors
@@ -31,7 +31,9 @@ public:
 	// Methods
 	void ajouterSommet(CSommet* sommet);
 	void supprimerSommet(int indiceSommet);
-	void modifierSommet(CSommet** liste, int size);
+	void modifierSommetId(int indiceSommet, int newId);
+	void modifierSommetListe(CSommet** sommetListe, int size);
+	CSommet* getSommet(int idSommet);
 };
 
 // Surcharge pour afficher

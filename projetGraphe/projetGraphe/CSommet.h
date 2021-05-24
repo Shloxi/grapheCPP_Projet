@@ -49,11 +49,13 @@ public:
 	//Methodes
 	void ajouterArcArrivant(CArc* arc);
 	void supprimerArcArrivant(int indiceArc);
-	void modifierArcArrivant(int indiceArc); // Modification d'un arc = Changement de liste
+	void modifierArcArrivant(int indiceArc, int newId);
+	void modifierListeArrivant(CArc** listeArrivant, int size);
 
 	void ajouterArcPartant(CArc* arc);
 	void supprimerArcPartant(int indiceArc);
-	void modifierArcPartant(int indiceArc); // Modification d'un arc = Changement de liste
+	void modifierArcPartant(int indiceArc, int newId);
+	void modifierListePartant(CArc** listePartant, int size);
 };
 
 ostream& operator<<(ostream& os, CSommet const S);

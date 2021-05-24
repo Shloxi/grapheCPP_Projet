@@ -4,6 +4,7 @@
 #include "CSommet.h"
 #include "CException.h"
 #include "CListeOperation.cpp"
+#include "CGrapheOperation.cpp"
 using namespace std;
 
 
@@ -27,13 +28,13 @@ CSommet::CSommet() {
 CSommet::CSommet(int idSommet) {
 	eIdSommet = idSommet;
 
-	eSizeDispoArrivant = 0;
+	eSizeDispoArrivant = 5;
 	eSizeArrivant = 0;
-	cArcArrivant = NULL;
+	cArcArrivant = createListeArc(NULL, eSizeDispoArrivant, eSizeArrivant);
 
-	eSizeDispoPartant = 0;
+	eSizeDispoPartant = 5;
 	eSizePartant = 0;
-	cArcPartant = NULL;
+	cArcPartant = createListeArc(NULL, eSizeDispoPartant, eSizePartant);
 }
 
 CSommet::CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** listePartant) {
@@ -42,13 +43,13 @@ CSommet::CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** l
 	eSizeArrivant = eSizeA;
 	eSizeDispoArrivant = (eSizeArrivant / 5 + 1) * 5;
 
-	cArcArrivant = createListe(listeArrivant, eSizeDispoArrivant, eSizeArrivant);
+	cArcArrivant = createListeArc(listeArrivant, eSizeDispoArrivant, eSizeArrivant);
 
 	eSizePartant = eSizeP;
 	eSizeDispoPartant = (eSizePartant / 5 + 1) * 5;
 
-	cArcPartant = createListe(listePartant, eSizeDispoPartant, eSizePartant);
-}
+	cArcPartant = createListeArc(listePartant, eSizeDispoPartant, eSizePartant);
+}	
 
 CSommet::CSommet(const CSommet& m) {
 	cout << m.eIdSommet << endl;
@@ -57,12 +58,12 @@ CSommet::CSommet(const CSommet& m) {
 	eSizeArrivant = m.eSizeArrivant;
 	eSizeDispoArrivant = m.eSizeDispoArrivant;
 
-	cArcArrivant = createListe(m.cArcArrivant, eSizeDispoArrivant, eSizeArrivant);
+	cArcArrivant = createListeArc(m.cArcArrivant, eSizeDispoArrivant, eSizeArrivant);
 
 	eSizePartant = m.eSizePartant;
 	eSizeDispoPartant = m.eSizeDispoPartant;
 
-	cArcPartant = createListe(m.cArcPartant, eSizeDispoPartant, eSizePartant);
+	cArcPartant = createListeArc(m.cArcPartant, eSizeDispoPartant, eSizePartant);
 }
 
 
@@ -70,13 +71,13 @@ CSommet::CSommet(const CSommet& m) {
 CSommet::~CSommet() {
 	if (cArcArrivant) {
 		for (int i = 0; i < eSizeDispoArrivant; ++i) {
-			delete[] cArcArrivant[i];
+			delete cArcArrivant[i];
 		}
 		delete [] cArcArrivant;
 	}
 	if (cArcPartant) {
 		for (int i = 0; i < eSizeDispoPartant; ++i) {
-			delete[] cArcPartant[i];
+			delete cArcPartant[i];
 		}
 		delete[] cArcPartant;
 	}
@@ -163,9 +164,14 @@ void CSommet::supprimerArcArrivant(int indiceArc) {
 	supprimerListe(cArcArrivant, indiceArc, &eSizeArrivant);
 }
 
-void CSommet::modifierArcArrivant(int indiceArc) {
-	ajouterArcPartant(cArcArrivant[indiceArc]);
-	supprimerArcArrivant(indiceArc);
+void CSommet::modifierArcArrivant(int indiceArc, int newId=-1) {
+	cArcArrivant[indiceArc]->setIdDest(newId);
+}
+
+void CSommet::modifierListeArrivant(CArc** listeArrivant, int size) {
+	eSizeArrivant = size;
+	eSizeDispoArrivant = (eSizeArrivant / 5 + 1) * 5;
+	cArcArrivant = createListeArc(listeArrivant, eSizeDispoArrivant, eSizeArrivant);
 }
 
 
@@ -179,26 +185,32 @@ void CSommet::supprimerArcPartant(int indiceArc) {
 	supprimerListe(cArcPartant, indiceArc, &eSizePartant);
 }
 
-void CSommet::modifierArcPartant(int indiceArc) {
-	ajouterArcArrivant(cArcPartant[indiceArc]);
-	supprimerArcPartant(indiceArc);
+void CSommet::modifierListePartant(CArc** listePartant, int size) {
+	eSizePartant = size;
+	eSizeDispoPartant = (eSizePartant / 5 + 1) * 5;
+	cArcPartant = createListeArc(listePartant, eSizeDispoPartant, eSizePartant);
+}
+
+void CSommet::modifierArcPartant(int indiceArc, int newId=-1) {
+	cArcPartant[indiceArc]->setIdDest(newId);
 }
 
 
 ostream& operator<<(ostream& os, CSommet const S) {
 	if (S.getIdSommet() == -1) {
-		// Erreur
+		throw CException(); // idSommet négative
 	}
 	else {
 		os << "-------------------------------------" << endl;
 		os << "Sommet " << S.getIdSommet() << ":" << endl;
-		if (S.getSizeArrivant() == 0 && S.getSizePartant() == 0) {
-			os << "Aucun Arc Partant ou Arrivant !" << endl;
+		if (S.getSizePartant() == 0) {
+			os << "Aucun Arc Partant !" << endl;
 		}
 		else {
-			afficherListe(S.getArcArrivant(), S.getSizeArrivant(), "Liste Arc Arrivant : ");
+			//afficherListe(S.getArcArrivant(), S.getSizeArrivant(), "Liste Arc Arrivant : ");
 			afficherListe(S.getArcPartant(), S.getSizePartant(), "Liste Arc Partant : ");
 		}
+		os << "Nombre d'Arc Arrivant : " << S.getSizeArrivant() << endl;
 	}
 	return os;
 }

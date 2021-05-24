@@ -37,7 +37,7 @@ void CArc::setIdDest(int eId) {
 
 ostream& operator<<(ostream& os, CArc const A) {
 	if (A.getIdDest() == -1) {
-		//Erreur
+		throw CException(); // idArc négative
 	}
 	else {
 		os << A.getIdDest() << " ";
