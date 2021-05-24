@@ -8,6 +8,7 @@ template <typename T> static T** reallocListe(T** liste, int* sizeDispo) {
 	*sizeDispo += 5;
 	T** newListe;
 	if (liste) {
+		*sizeDispo += 5;
 		newListe = (T**)realloc(liste, sizeof(T*) * *sizeDispo);
 	}
 	else {

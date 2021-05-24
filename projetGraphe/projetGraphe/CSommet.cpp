@@ -52,6 +52,7 @@ CSommet::CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** l
 }	
 
 CSommet::CSommet(const CSommet& m) {
+	cout << m.eIdSommet << endl;
 	eIdSommet = m.eIdSommet;
 
 	eSizeArrivant = m.eSizeArrivant;
@@ -64,6 +65,7 @@ CSommet::CSommet(const CSommet& m) {
 
 	cArcPartant = createListeArc(m.cArcPartant, eSizeDispoPartant, eSizePartant);
 }
+
 
 /*
 CSommet::~CSommet() {
