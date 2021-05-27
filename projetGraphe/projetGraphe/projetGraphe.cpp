@@ -26,12 +26,18 @@ int main()
         //supprimerArc(graphe->getSommet(4), graphe->getSommet(3));
         // Suppression introuvable avec throw()
         //supprimerArc(graphe->getSommet(4), graphe->getSommet(2));
+        cout << *graphe << endl;
+        //reverseGraphe(graphe);
+        //cout << *graphe << endl;
+        //reverseGraphe(graphe);
         supprimerSommet(graphe, graphe->getSommet(2));
+        cout << *graphe << endl;
+
     }
     catch (CException e) {
         cout << e.ExceptGetIndexError() << endl;
     }
-    cout << *graphe << endl;
+    
     /*
     CArc* arc1 = new CArc(2);
     CArc* arc2 = new CArc(3);

@@ -90,21 +90,25 @@ static void ajouterSommet(CGraphe* G, int idSommet) {
 }
 
 static void supprimerSommet(CGraphe* G, CSommet* S) {
-	if (S == NULL) {
+	if (S == NULL || G == NULL) {
 		throw CException(); // Argument null
 	}
-
-	/*
+	int indiceSommet;
 	for (int i = 0; i < S->getSizePartant(); i++) {
-		CArc* toDelete = S->getArcPartant()[i];
-		for (int y = 0; G->getSize(); y++) {
-			for (int z = 0; G->getSommetListe()[y]->getSizeArrivant(); z++) {
-				if (toDelete == G->getSommetListe()[y]->getArcArrivant()[z]) {
-					G->getSommetListe()[y]->supprimerArcArrivant(z);
-				}
+		supprimerArc(G->getSommet(S->getArcPartant()[i]->getIdDest()), S);
+	}
+	for (int i = 0; i < G->getSize(); i++) {
+		if (G->getSommetListe()[i]->getIdSommet() == S->getIdSommet()) {
+			indiceSommet = i;
+		}
+		for (int y = 0; y < G->getSommetListe()[i]->getSizePartant(); y++) {
+			if (S->getIdSommet() == G->getSommetListe()[i]->getArcPartant()[y]->getIdDest()) {
+				supprimerArc(S, G->getSommetListe()[i]);
 			}
 		}
 	}
+	G->supprimerSommet(indiceSommet);
+	/*
 	for (int i = 0; G->getSize(); i++) {
 		for (int y = 0; y < G->getSommetListe()[i]->getSizePartant(); y++) {
 			if (G->getSommetListe()[i]->getArcPartant()[y]->getIdDest() == S->getIdSommet()) {
@@ -123,5 +127,7 @@ static void supprimerSommet(CGraphe* G, CSommet* S) {
 
 
 static void reverseGraphe(CGraphe* G) {
-
+	for (int i = 0; i < G->getSize(); i++) {
+		G->getSommetListe()[i]->reverseArc();
+	}
 }

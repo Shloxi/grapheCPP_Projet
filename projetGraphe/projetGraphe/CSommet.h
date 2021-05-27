@@ -56,6 +56,8 @@ public:
 	void supprimerArcPartant(int indiceArc);
 	void modifierArcPartant(int indiceArc, int newId);
 	void modifierListePartant(CArc** listePartant, int size);
+
+	void reverseArc();
 };
 
 ostream& operator<<(ostream& os, CSommet const S);

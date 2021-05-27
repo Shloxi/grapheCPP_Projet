@@ -52,7 +52,6 @@ CSommet::CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** l
 }	
 
 CSommet::CSommet(const CSommet& m) {
-	cout << m.eIdSommet << endl;
 	eIdSommet = m.eIdSommet;
 
 	eSizeArrivant = m.eSizeArrivant;
@@ -193,6 +192,23 @@ void CSommet::modifierListePartant(CArc** listePartant, int size) {
 
 void CSommet::modifierArcPartant(int indiceArc, int newId=-1) {
 	cArcPartant[indiceArc]->setIdDest(newId);
+}
+
+void CSommet::reverseArc() {
+	for (int i = 0; i < eSizePartant; i++) {
+		cArcPartant[i]->setIdDest(eIdSommet);
+
+	}
+	CArc** oldArcArrivant = cArcArrivant;
+	int oldSizeArrivant = eSizeArrivant;
+	int oldSizeDispoArrivant = eSizeDispoArrivant;
+
+	cArcArrivant = cArcPartant;
+	cArcPartant = oldArcArrivant;
+	eSizeArrivant = eSizePartant;
+	eSizePartant = oldSizeArrivant;
+	eSizeDispoArrivant = eSizeDispoPartant;
+	eSizeDispoPartant = oldSizeDispoArrivant;
 }
 
 
