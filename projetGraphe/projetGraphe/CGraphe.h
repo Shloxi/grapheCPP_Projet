@@ -21,7 +21,7 @@ public:
 	CGraphe(int size, CSommet** liste);
 	CGraphe(const CGraphe& m); // Par recopie
 	//CGraphe(const char* filename) throw();
-	//~CGraphe(); // Destructeur
+	~CGraphe(); // Destructeur
 
 	//Accessors
 	CSommet** getSommetListe() const;
@@ -34,10 +34,11 @@ public:
 	void modifierSommetId(int indiceSommet, int newId);
 	void modifierSommetListe(CSommet** sommetListe, int size);
 	CSommet* getSommet(int idSommet);
+	ostream& display(ostream& os) const;
 };
 
 // Surcharge pour afficher
-ostream& operator<<(ostream& os, CGraphe const G);
+ostream& operator<<(ostream& os, CGraphe* const G);
 
 #endif // !CGraphe_h
 

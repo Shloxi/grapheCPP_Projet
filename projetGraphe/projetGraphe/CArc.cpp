@@ -35,12 +35,16 @@ void CArc::setIdDest(int eId) {
 	eIdDest = eId;
 }
 
-ostream& operator<<(ostream& os, CArc const A) {
-	if (A.getIdDest() == -1) {
+ostream& CArc::display(ostream& os) const {
+	if (eIdDest == -1) {
 		throw CException(); // idArc négative
 	}
 	else {
-		os << A.getIdDest() << " ";
+		os << eIdDest << " ";
 	}
+}
+
+ostream& operator<<(ostream& os, CArc* const A) {
+	A->display(os);
 	return os;
 }

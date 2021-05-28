@@ -33,15 +33,14 @@ CGraphe::CGraphe(const CGraphe& m) {
 	cSommetListe = createListeSommet(m.cSommetListe, eSizeDispo, eSize);
 }
 
-/*
 CGraphe::~CGraphe() {
 	if (cSommetListe) {
-		for (int i = 0; i < eSizeDispo; ++i) {
-			delete[] cSommetListe[i];
+		for (int i = 0; i < eSize; ++i) {
+			delete cSommetListe[i];
 		}
-		delete[] cSommetListe;
+		free(cSommetListe);
 	}
-} */
+}
 
 
 /*
@@ -108,10 +107,15 @@ CSommet* CGraphe::getSommet(int idSommet) {
 	throw CException(); // Sommet introuvable
 }
 
-ostream& operator<<(ostream& os, CGraphe const G) {
-	if (G.getSize() == 0) {
+ostream& CGraphe::display(ostream& os) const {
+	if (eSize == 0) {
 		throw CException(); // liste vide
 	}
-	afficherListe(G.getSommetListe(), G.getSize(), "Presentation du graphe :\n");
+	afficherListe(cSommetListe, eSize, "Presentation du graphe :\n", os);
+	return os;
+}
+
+ostream& operator<<(ostream& os, CGraphe* const G) {
+	G->display(os);
 	return os;
 }

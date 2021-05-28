@@ -67,6 +67,7 @@ static void supprimerArc(CSommet* SommetArrivant, CSommet* SommetPartant) {
 				SommetArrivant->supprimerArcArrivant(i);
 			}
 		}
+		delete toDelete;
 	}
 	else {
 		throw CException(); // Arc introuvable
@@ -93,7 +94,7 @@ static void supprimerSommet(CGraphe* G, CSommet* S) {
 	if (S == NULL || G == NULL) {
 		throw CException(); // Argument null
 	}
-	int indiceSommet;
+	int indiceSommet = -1;
 	for (int i = 0; i < S->getSizePartant(); i++) {
 		supprimerArc(G->getSommet(S->getArcPartant()[i]->getIdDest()), S);
 	}
@@ -107,22 +108,13 @@ static void supprimerSommet(CGraphe* G, CSommet* S) {
 			}
 		}
 	}
-	G->supprimerSommet(indiceSommet);
-	/*
-	for (int i = 0; G->getSize(); i++) {
-		for (int y = 0; y < G->getSommetListe()[i]->getSizePartant(); y++) {
-			if (G->getSommetListe()[i]->getArcPartant()[y]->getIdDest() == S->getIdSommet()) {
-				G->getSommetListe()[i]->supprimerArcPartant(y);
-			}
-		}
+	if (indiceSommet >= 0) {
+		G->supprimerSommet(indiceSommet);
 	}
-	for (int i = 0; G->getSize(); i++) {
-		if (G->getSommetListe()[i] == S) {
-			G->supprimerSommet(i);
-		}
+	else {
+		throw CException();
 	}
-	//delete S;
-	*/
+	delete S;
 }
 
 

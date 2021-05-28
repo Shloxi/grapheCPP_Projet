@@ -31,7 +31,7 @@ public:
 	CSommet(int idSommet);
 	CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** listePartant);
 	CSommet(const CSommet& m); // Par recopie
-	//~CSommet() throw(); // Destructeur
+	~CSommet(); // Destructeur
 
 	//Accesseurs
 	int getIdSommet() const;
@@ -56,11 +56,11 @@ public:
 	void supprimerArcPartant(int indiceArc);
 	void modifierArcPartant(int indiceArc, int newId);
 	void modifierListePartant(CArc** listePartant, int size);
-
 	void reverseArc();
+	ostream& display(ostream& os) const;
 };
 
-ostream& operator<<(ostream& os, CSommet const S);
+ostream& operator<<(ostream& os, CSommet* const S);
 
 #endif // !CSommet_h
 

@@ -5,8 +5,8 @@
 using namespace std;
 
 template <typename T> static T** reallocListe(T** liste, int* sizeDispo) {
-	*sizeDispo += 5;
 	T** newListe;
+	*sizeDispo += 5;
 	if (liste) {
 		*sizeDispo += 5;
 		newListe = (T**)realloc(liste, sizeof(T*) * *sizeDispo);
@@ -46,13 +46,13 @@ template <typename T> static void supprimerListe(T** liste, int indiceArc, int* 
 	*size -= 1;
 }
 
-template <typename T> static void afficherListe(T** liste, const int size, const char typeListe[]) {
+template <typename T> static void afficherListe(T** liste, const int size, const char typeListe[], ostream& os) {
 	if (size != 0)  {
-		cout << typeListe;
+		os << typeListe;
 		for (int i = 0; i < size; ++i) {
-			cout << *(liste[i]);
+			os << liste[i];
 		}
-		cout << endl;
+		os << endl;
 	}
 }
 

@@ -16,9 +16,10 @@ public:
 	// Accesseurs
 	int getIdDest() const;
 	void setIdDest(int eId);
+	ostream& display(ostream& os) const;
 };
 
-ostream& operator<<(ostream& os, CArc const A);
+ostream& operator<<(ostream& os, CArc* const A);
 
 #endif // !CArc_h
 

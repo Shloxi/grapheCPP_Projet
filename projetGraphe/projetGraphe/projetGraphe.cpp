@@ -1,4 +1,9 @@
 #include <iostream>
+
+#include "windows.h"
+#define _CRTDBG_MAP_ALLOC //to get more details
+#include <crtdbg.h>   //for malloc and free
+
 #include "CGraphe.h"
 #include "CSommet.h"
 #include "CArc.h"
@@ -7,6 +12,10 @@
 
 int main()
 {
+    _CrtMemState sOld;
+    _CrtMemState sNew;
+    _CrtMemState sDiff;
+    _CrtMemCheckpoint(&sOld); //take a snapchot
     CGraphe* graphe = new CGraphe();
     try {
         ajouterSommet(graphe, 1);
@@ -14,7 +23,6 @@ int main()
         ajouterSommet(graphe, 3);
         ajouterSommet(graphe, 4);
         // On ne peut pas ajouter plusieurs même sommet
-        //ajouterSommet(graphe, 4);
         //ajouterSommet(graphe, 4);
         ajouterArc(graphe->getSommet(1), graphe->getSommet(2));
         ajouterArc(graphe->getSommet(1), graphe->getSommet(3));
@@ -26,68 +34,27 @@ int main()
         //supprimerArc(graphe->getSommet(4), graphe->getSommet(3));
         // Suppression introuvable avec throw()
         //supprimerArc(graphe->getSommet(4), graphe->getSommet(2));
-        cout << *graphe << endl;
+        cout << graphe << endl;
         //reverseGraphe(graphe);
         //cout << *graphe << endl;
         //reverseGraphe(graphe);
         supprimerSommet(graphe, graphe->getSommet(2));
-        cout << *graphe << endl;
-
+        cout << graphe << endl;
+        delete graphe;
+        _CrtMemCheckpoint(&sNew); //take a snapchot
     }
     catch (CException e) {
         cout << e.ExceptGetIndexError() << endl;
     }
+    if (_CrtMemDifference(&sDiff, &sOld, &sNew)) // if there is a difference
+    {
+        OutputDebugString(L"-----------_CrtMemDumpStatistics ---------");
+        _CrtMemDumpStatistics(&sDiff);
+        OutputDebugString(L"-----------_CrtMemDumpAllObjectsSince ---------");
+        _CrtMemDumpAllObjectsSince(&sOld);
+        OutputDebugString(L"-----------_CrtDumpMemoryLeaks ---------");
+        _CrtDumpMemoryLeaks();
+    }
     
-    /*
-    CArc* arc1 = new CArc(2);
-    CArc* arc2 = new CArc(3);
-    CArc* arc3 = new CArc(1);
-    
-    CSommet* sommet1 = new CSommet(1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc2);
-    sommet1->ajouterArcPartant(arc2);
-    sommet1->ajouterArcPartant(arc2);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->supprimerArcPartant(0);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcPartant(arc1);
-    sommet1->ajouterArcArrivant(arc3);
-
-    CSommet* sommet2 = new CSommet(2);
-    sommet2->ajouterArcArrivant(arc1);
-
-    CSommet* sommet3 = new CSommet(3);
-    sommet3->ajouterArcArrivant(arc2);
-
-    CSommet* sommet4 = new CSommet(4);
-    sommet4->ajouterArcPartant(arc3);
-
-    // Test recopie
-    CSommet* sommet5 = new CSommet(*sommet1);
-    sommet5->setIdSommet(5);
-    sommet5->supprimerArcPartant(0);
-
-    CGraphe* graphe1 = new CGraphe();
-    graphe1->ajouterSommet(sommet1);
-    graphe1->ajouterSommet(sommet2);
-    graphe1->ajouterSommet(sommet3);
-    graphe1->ajouterSommet(sommet4);
-    graphe1->ajouterSommet(sommet5);
-
-    CGraphe* graphe2 = new CGraphe(*graphe1);
-    graphe2->supprimerSommet(0);
-    //graphe2->modifierSommet();
-
-    std::cout << *graphe1 << std::endl;
-    std::cout << *graphe2 << std::endl;
-    */
     std::cout << "Hello World!\n";
 }

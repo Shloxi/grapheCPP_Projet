@@ -66,21 +66,19 @@ CSommet::CSommet(const CSommet& m) {
 }
 
 
-/*
 CSommet::~CSommet() {
 	if (cArcArrivant) {
-		for (int i = 0; i < eSizeDispoArrivant; ++i) {
-			delete cArcArrivant[i];
+		for (int i = 0; i < eSizeArrivant; ++i) {
+			if (cArcArrivant[i]) {
+				delete cArcArrivant[i];
+			}
 		}
-		delete [] cArcArrivant;
+		free(cArcArrivant);
 	}
 	if (cArcPartant) {
-		for (int i = 0; i < eSizeDispoPartant; ++i) {
-			delete cArcPartant[i];
-		}
-		delete[] cArcPartant;
+		free(cArcPartant);
 	}
-} */
+} 
 
 
 /*
@@ -211,22 +209,26 @@ void CSommet::reverseArc() {
 	eSizeDispoPartant = oldSizeDispoArrivant;
 }
 
-
-ostream& operator<<(ostream& os, CSommet const S) {
-	if (S.getIdSommet() == -1) {
+ostream& CSommet::display(ostream& os) const{
+	if (eIdSommet == -1) {
 		throw CException(); // idSommet négative
 	}
 	else {
 		os << "-------------------------------------" << endl;
-		os << "Sommet " << S.getIdSommet() << ":" << endl;
-		if (S.getSizePartant() == 0) {
+		os << "Sommet " << eIdSommet << ":" << endl;
+		if (eSizePartant == 0) {
 			os << "Aucun Arc Partant !" << endl;
 		}
 		else {
-			//afficherListe(S.getArcArrivant(), S.getSizeArrivant(), "Liste Arc Arrivant : ");
-			afficherListe(S.getArcPartant(), S.getSizePartant(), "Liste Arc Partant : ");
+			afficherListe(cArcPartant, eSizePartant, "Liste Arc Partant : ", os);
 		}
-		os << "Nombre d'Arc Arrivant : " << S.getSizeArrivant() << endl;
+		os << "Nombre d'Arc Arrivant : " << eSizeArrivant << endl;
 	}
+	return os;
+}
+
+
+ostream& operator<<(ostream& os, CSommet* const S) {
+	S->display(os);
 	return os;
 }
