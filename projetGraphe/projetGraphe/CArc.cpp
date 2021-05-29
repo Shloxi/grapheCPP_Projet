@@ -18,8 +18,8 @@ CArc::CArc(int eId) {
 	eIdDest = eId;
 }
 
-CArc::CArc(const CArc& m) {
-	eIdDest = m.eIdDest;
+CArc::CArc(const CArc& a) {
+	eIdDest = a.eIdDest;
 }
 
 /*

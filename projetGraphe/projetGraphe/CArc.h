@@ -11,7 +11,7 @@ public:
 	// Constructeurs
 	CArc(); // Par défaut
 	CArc(int eId);
-	CArc(const CArc& m); // Par recopie
+	CArc(const CArc& a); // Par recopie
 
 	// Accesseurs
 	int getIdDest() const;
