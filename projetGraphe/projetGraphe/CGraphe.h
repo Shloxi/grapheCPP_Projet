@@ -20,7 +20,7 @@ public:
 	CGraphe(); // Par défaut
 	CGraphe(int size, CSommet** liste);
 	CGraphe(const CGraphe& m); // Par recopie
-	//CGraphe(const char* filename) throw();
+	CGraphe(const char* filename);
 	~CGraphe(); // Destructeur
 
 	//Accessors

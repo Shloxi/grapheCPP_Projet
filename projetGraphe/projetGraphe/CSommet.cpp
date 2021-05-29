@@ -18,11 +18,11 @@ CSommet::CSommet() {
 
 	eSizeDispoArrivant = 0;
 	eSizeArrivant = 0;
-	cArcArrivant = NULL;
+	cArcArrivant = createListeArc(NULL, eSizeDispoArrivant, eSizeArrivant);
 
 	eSizeDispoPartant = 0;
 	eSizePartant = 0;
-	cArcPartant = NULL;
+	cArcPartant = createListeArc(NULL, eSizeDispoArrivant, eSizeArrivant);
 }
 
 CSommet::CSommet(int idSommet) {

@@ -146,6 +146,7 @@
     <ClCompile Include="CListeOperation.cpp" />
     <ClCompile Include="CSommet.cpp" />
     <ClCompile Include="projetGraphe.cpp" />
+    <ClCompile Include="Parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CArc.h" />

@@ -35,7 +35,7 @@ static CSommet** createListeSommet(CSommet** liste, int sizeDispo, int size) {
 	return newListe;
 }
 
-static void ajouterArc(CSommet* SommetArrivant, CSommet* SommetPartant) {
+static void ajouterArcSommet(CSommet* SommetArrivant, CSommet* SommetPartant) {
 	if (SommetArrivant == NULL || SommetPartant == NULL) {
 		throw CException(); // Argument null
 	}
@@ -49,7 +49,7 @@ static void ajouterArc(CSommet* SommetArrivant, CSommet* SommetPartant) {
 	SommetPartant->ajouterArcPartant(newArc);
 }
 
-static void supprimerArc(CSommet* SommetArrivant, CSommet* SommetPartant) {
+static void supprimerArcSommet(CSommet* SommetArrivant, CSommet* SommetPartant) {
 	if (SommetArrivant == NULL || SommetPartant == NULL) {
 		throw CException(); // Argument null
 	}
@@ -75,7 +75,7 @@ static void supprimerArc(CSommet* SommetArrivant, CSommet* SommetPartant) {
 	
 }
 
-static void ajouterSommet(CGraphe* G, int idSommet) {
+static void ajouterSommetGraphe(CGraphe* G, int idSommet) {
 	if (idSommet > 0) {
 		for (int i = 0; i < G->getSize(); i++) {
 			if (G->getSommetListe()[i]->getIdSommet() == idSommet) {
@@ -90,13 +90,13 @@ static void ajouterSommet(CGraphe* G, int idSommet) {
 	}
 }
 
-static void supprimerSommet(CGraphe* G, CSommet* S) {
+static void supprimerSommetGraphe(CGraphe* G, CSommet* S) {
 	if (S == NULL || G == NULL) {
 		throw CException(); // Argument null
 	}
 	int indiceSommet = -1;
 	for (int i = 0; i < S->getSizePartant(); i++) {
-		supprimerArc(G->getSommet(S->getArcPartant()[i]->getIdDest()), S);
+		supprimerArcSommet(G->getSommet(S->getArcPartant()[i]->getIdDest()), S);
 	}
 	for (int i = 0; i < G->getSize(); i++) {
 		if (G->getSommetListe()[i]->getIdSommet() == S->getIdSommet()) {
@@ -104,7 +104,7 @@ static void supprimerSommet(CGraphe* G, CSommet* S) {
 		}
 		for (int y = 0; y < G->getSommetListe()[i]->getSizePartant(); y++) {
 			if (S->getIdSommet() == G->getSommetListe()[i]->getArcPartant()[y]->getIdDest()) {
-				supprimerArc(S, G->getSommetListe()[i]);
+				supprimerArcSommet(S, G->getSommetListe()[i]);
 			}
 		}
 	}

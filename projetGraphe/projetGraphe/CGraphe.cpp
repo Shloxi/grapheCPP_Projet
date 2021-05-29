@@ -4,6 +4,7 @@
 #include "CGraphe.h"
 #include "CGrapheOperation.cpp"
 #include "CListeOperation.cpp"
+#include "Parser.cpp"
 #include "CException.h"
 using namespace std;
 
@@ -15,7 +16,7 @@ using namespace std;
 CGraphe::CGraphe() {
 	eSize = 0;
 	eSizeDispo = 0;
-	cSommetListe = NULL;
+	cSommetListe = createListeSommet(NULL, eSizeDispo, eSize);
 }
 
 CGraphe::CGraphe(int size, CSommet** liste) {
@@ -31,6 +32,51 @@ CGraphe::CGraphe(const CGraphe& m) {
 	eSizeDispo = m.eSizeDispo;
 
 	cSommetListe = createListeSommet(m.cSommetListe, eSizeDispo, eSize);
+}
+
+CGraphe::CGraphe(const char* filename) {
+	eSize = 0;
+	eSizeDispo = 0;
+	cSommetListe = createListeSommet(NULL, eSizeDispo, eSize);
+	// On appelle d'abord le parseur pour récupérer les valeurs du fichier
+	char** valeurs = parser(filename);
+	
+	// Analyseur syntaxique
+	int indice = 6;
+	int parcoursNombre = 0;
+	int nombre1 = 0;
+	int nombre2 = 0;
+	int nbSommets = 0;
+	int nbArcs = 0;
+	compare(valeurs[0], "NBSommets");
+	sscanf_s(valeurs[1], "%d", &nbSommets);
+	compare(valeurs[2], "NBArcs");
+	sscanf_s(valeurs[3], "%d", &nbArcs);
+	compare(valeurs[4], "Sommets");
+	compare(valeurs[5], "[");
+	for (int i = indice; i < indice + (2 * nbSommets); i+=2) {
+		compare(valeurs[i], "Numero");
+		sscanf_s(valeurs[i+1], "%d", &nombre1);
+		ajouterSommetGraphe(this, nombre1);
+	}
+	indice += (2 * nbSommets);
+	compare(valeurs[indice], "]");
+	compare(valeurs[indice + 1], "Arcs");
+	compare(valeurs[indice+2], "[");
+	indice += 3;
+	for (int i = indice; i < indice + (4 * nbArcs); i += 4) {
+		compare(valeurs[i], "Debut");
+		sscanf_s(valeurs[i+1], "%d", &nombre1);
+		compare(valeurs[i+2], "Fin");
+		sscanf_s(valeurs[i+3], "%d", &nombre2);
+		ajouterArcSommet(this->getSommet(nombre2), this->getSommet(nombre1));
+	}
+	indice += (4 * nbArcs);
+	// On libère notre tableau de valeurs
+	for (int i = 0; i < 100; ++i) {
+		free(valeurs[i]);
+	}
+	free(valeurs);
 }
 
 CGraphe::~CGraphe() {
