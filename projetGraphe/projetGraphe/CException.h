@@ -10,11 +10,11 @@ private:
 public:
 	const char** errors;
 
-	// Constructors
+	// Constructeurs
 	CException();
 	CException(int eError);
 
-	// Methods 
+	// Methodes 
 	void ExceptModifErrorType(int eErrorType);
 	int ExceptGetIndexError();
 

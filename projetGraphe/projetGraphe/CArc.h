@@ -2,6 +2,9 @@
 #define CArc_h
 using namespace std;
 
+// Constante d'erreurs liees aux operations sur un arc
+#define wrongIndiceArc 21
+
 class CArc {
 
 private:
@@ -9,7 +12,7 @@ private:
 
 public:
 	// Constructeurs
-	CArc(); // Par défaut
+	CArc(); // Par defaut
 	CArc(int eId);
 	CArc(const CArc& a); // Par recopie
 

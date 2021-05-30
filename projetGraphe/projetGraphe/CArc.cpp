@@ -37,7 +37,7 @@ void CArc::setIdDest(int eId) {
 
 ostream& CArc::display(ostream& os) const {
 	if (eIdDest == -1) {
-		throw CException(); // idArc négative
+		throw CException(wrongIndiceArc); // idArc négative
 	}
 	else {
 		os << eIdDest << " ";

@@ -48,12 +48,13 @@ CGraphe::CGraphe(const char* filename) {
 	int nombre2 = 0;
 	int nbSommets = 0;
 	int nbArcs = 0;
-	compare(valeurs[0], "NBSommets");
+	compare(valeurs[0], "NBSommets"); // On verifie que la syntaxe du fichier est bonne
 	sscanf_s(valeurs[1], "%d", &nbSommets);
 	compare(valeurs[2], "NBArcs");
 	sscanf_s(valeurs[3], "%d", &nbArcs);
 	compare(valeurs[4], "Sommets");
 	compare(valeurs[5], "[");
+	// On recupere toutes les id de sommets et on les ajoutes a notre graphe
 	for (int i = indice; i < indice + (2 * nbSommets); i+=2) {
 		compare(valeurs[i], "Numero");
 		sscanf_s(valeurs[i+1], "%d", &nombre1);
@@ -64,6 +65,7 @@ CGraphe::CGraphe(const char* filename) {
 	compare(valeurs[indice + 1], "Arcs");
 	compare(valeurs[indice+2], "[");
 	indice += 3;
+	// On recupere tous les arcs et on les ajoutes a nos sommets du graphe
 	for (int i = indice; i < indice + (4 * nbArcs); i += 4) {
 		compare(valeurs[i], "Debut");
 		sscanf_s(valeurs[i+1], "%d", &nombre1);
@@ -150,12 +152,12 @@ CSommet* CGraphe::getSommet(int idSommet) {
 			return cSommetListe[i];
 		}
 	}
-	throw CException(); // Sommet introuvable
+	throw CException(missingSommet); // Sommet introuvable
 }
 
 ostream& CGraphe::display(ostream& os) const {
 	if (eSize == 0) {
-		throw CException(); // liste vide
+		throw CException(emptyList); // liste vide
 	}
 	afficherListe(cSommetListe, eSize, "Presentation du graphe :\n", os);
 	return os;

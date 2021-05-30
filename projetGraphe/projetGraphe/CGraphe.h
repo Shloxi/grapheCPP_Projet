@@ -3,6 +3,9 @@
 #include "CSommet.h"
 using namespace std;
 
+#define missingSommet 13
+#define emptyList 3
+
 class CGraphe {
 
 private:
@@ -10,25 +13,25 @@ private:
 	int eSizeDispo; // Taille dispo de la liste sommets
 	CSommet** cSommetListe; // Liste de sommets
 
-	// Accesseurs et methodes en prive pour des raisons de sécurité de gestion de liste
+	// Accesseurs et methodes en prive pour des raisons de securite de gestion de liste
 	void setSommetListe(CSommet** liste);
 	void setSize(int size);
 	void setSizeDispo(int sizeDispo);
 
 public:
-	// Constructors
+	// Constructeurs
 	CGraphe(); // Par défaut
 	CGraphe(int size, CSommet** liste);
 	CGraphe(const CGraphe& m); // Par recopie
 	CGraphe(const char* filename);
 	~CGraphe(); // Destructeur
 
-	//Accessors
+	// Accesseurs
 	CSommet** getSommetListe() const;
 	int getSize() const;
 	int getSizeDispo() const;
 
-	// Methods
+	// Methodes
 	void ajouterSommet(CSommet* sommet);
 	void supprimerSommet(int indiceSommet);
 	void modifierSommetId(int indiceSommet, int newId);

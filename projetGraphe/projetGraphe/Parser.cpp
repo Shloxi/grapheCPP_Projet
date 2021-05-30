@@ -4,20 +4,24 @@
 #include "CException.h"
 using namespace std; 
 
+// Constantes d'erreurs liees aux parsages d'un fichier
+#define syntaxError 31
+#define emptyFileError 32
+#define corruptFlow 33
+
 static char** parser(const char* filename) {
-	// On vérifie que le nom du fichier n'est pas null
+	// On verifie que le nom du fichier n'est pas null
 	if (filename == NULL) {
-		cout << "Fichier" << endl;
-		throw CException();
+		throw CException(emptyFileError);
 	}
 
-	// On vérifie que le flux crée est fonctionnelle
+	// On verifie que le flux crée est fonctionnelle
 	ifstream monFlux(filename);
 	if (!monFlux) {
-		cout << "Flux" << endl;
-		throw CException();
+		throw CException(corruptFlow);
 	}
-	char** valeurs;
+	char** valeurs; // Tableau de valeurs a retourner
+	// On alloue dans la memoire ce tableau de valeurs qui sera libere dans l'analyseur syntaxique
 	valeurs = new char * [100];
 	for (int i = 0; i < 100; i++) {
 		valeurs[i] = new char[20];
@@ -26,28 +30,28 @@ static char** parser(const char* filename) {
 		}
 	}
 	char sOutput[50]; // Contenu du fichier
-	int i = 0; // indice de parcours du fichier
-	int y = 0; // indice de parcours des valeurs
+	int i = 0; // Indice de parcours du fichier
+	int y = 0; // Indice de parcours des valeurs
 	do {
-		monFlux >> sOutput;
-		while (sOutput[i] != '=' && sOutput[i] != '\0') {
-			valeurs[y][i] = sOutput[i];
+		monFlux >> sOutput; // On récupère une ligne
+		while (sOutput[i] != '=' && sOutput[i] != '\0') { // Tant qu'on atteint pas la fin de la ligne ou le début d'un valeur
+			valeurs[y][i] = sOutput[i]; // On récupère les informations pour l'analyse de la syntaxe
 			i++;
 		}
-		if (sOutput[i] != '\0') {
+		if (sOutput[i] != '\0') { // Si on est pas en fin de ligne / On a une valeur
 			y++;
 			int ecritureNombre = i + 1;
 			i += 1;
-			while (sOutput[i] != '\0' && sOutput[i] != ',') {
+			while (sOutput[i] != '\0' && sOutput[i] != ',') { // On écrit la totalité de la valeur, pas que un chiffre mais un nombre
 				valeurs[y][0 + i - ecritureNombre] = sOutput[i];
 				i++;
 			}
 			
 		}
-		valeurs[y][i + 1] = '\0';
+		valeurs[y][i + 1] = '\0'; // On termine chaque valeur par un caractère de fin de ligne
 		y++;
 		i = 0;
-	} while (sOutput[0] != '\0');
+	} while (sOutput[0] != '\0'); // Tant qu'on est pas a la fin du fichier
 	return valeurs;
 }
 
@@ -55,13 +59,11 @@ static void compare(const char* s1, const char* s2) {
 	int indice = 0;
 	do {
 		if (s1[indice] != s2[indice]) {
-			cout << s1 << " != " << s2 << endl;
-			throw CException(); // Erreur de syntaxe
+			throw CException(syntaxError);
 		}
 		indice++;
 	} while (s2[indice] != '\0');
 	if (s1[indice] != '\0') {
-		cout << s1 << " != " << s2 << endl;
-		throw CException(); // Erreur de syntaxe
+		throw CException(syntaxError);
 	}
 }

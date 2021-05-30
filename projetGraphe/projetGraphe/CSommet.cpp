@@ -7,7 +7,6 @@
 #include "CGrapheOperation.cpp"
 using namespace std;
 
-
 /*
 ##################
   CONSTRUCTEURS
@@ -193,6 +192,7 @@ void CSommet::modifierArcPartant(int indiceArc, int newId=-1) {
 }
 
 void CSommet::reverseArc() {
+	// Cette fonction va inverser les deux listes
 	for (int i = 0; i < eSizePartant; i++) {
 		cArcPartant[i]->setIdDest(eIdSommet);
 
@@ -211,7 +211,7 @@ void CSommet::reverseArc() {
 
 ostream& CSommet::display(ostream& os) const{
 	if (eIdSommet == -1) {
-		throw CException(); // idSommet négative
+		throw CException(wrongIndiceSommet); // idSommet négative
 	}
 	else {
 		os << "-------------------------------------" << endl;

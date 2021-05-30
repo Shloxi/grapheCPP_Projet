@@ -9,19 +9,27 @@ CException::CException() {
 	for (int i = 0; i < 100; ++i) {
 		errors[i] = new char[100];
 	}
-	errors[1] = "Erreur : Le fichier est vide";
-	errors[2] = "Erreur : Fichier inexistant";
-	errors[3] = "Erreur : Le fichier indique un type de matrice non pris en charge";
-	errors[4] = "Erreur : Le fichier possede une syntaxe non pris en charge";
-	errors[5] = "Erreur : Le fichier indique un caractere de nombre de lignes incorrect";
-	errors[6] = "Erreur : Le fichier indique un caractere de nombres de colonnes incorrect";
-	errors[7] = "Erreur : Le fichier possede des donnees non prises en charge";
-	errors[8] = "Erreur : Le fichier indique des dimensions non compatibles avec les donnees";
-	errors[11] = "Erreur : Nombre de colonnes ou nombre de lignes nul";
-	errors[12] = "Erreur : Tableau de donnees vide ou inexistant (null)";
-	errors[51] = "Erreur : Les dimensions des matrices ne sont pas egales";
-	errors[52] = "Erreur : Les dimensions des matrices ne sont pas compatibles pour cette operation";
-	errors[53] = "Erreur : La division par 0 est interdite";
+
+	// Erreurs générales
+	errors[1] = "Erreur : Allocation non réussie";
+	errors[2] = "Erreur : Indice supérieur à la liste";
+	errors[3] = "Erreur : Liste vide";
+	errors[4] = "Erreur : Argument null";
+
+	// Erreurs liee aux sommets 
+	errors[11] = "Erreur : Identifiant de sommet negatif";
+	errors[12] = "Erreur : Sommet deja existant";
+	errors[13] = "Erreur : Sommet introuvable";
+
+	// Erreurs liee aux arcs
+	errors[21] = "Erreur : Identifiant d'arc négatif";
+	errors[22] = "Erreur : Arc déjà existant";
+	errors[23] = "Erreur : Arc introuvable";
+
+	// Erreur liee au parseur
+	errors[31] = "Erreur : Erreur de syntaxe";
+	errors[32] = "Erreur : Le fichier spécifié est vide";
+	errors[33] = "Erreur : Flux de lecture de fichier corrompu";
 }
 
 CException::CException(int eError) {
@@ -31,19 +39,27 @@ CException::CException(int eError) {
 	for (int i = 0; i < 100; ++i) {
 		errors[i] = new char[100];
 	}
-	errors[1] = "Erreur : Le fichier est vide";
-	errors[2] = "Erreur : Fichier inexistant";
-	errors[3] = "Erreur : Le fichier indique un type de matrice non pris en charge";
-	errors[4] = "Erreur : Le fichier possede une syntaxe non pris en charge";
-	errors[5] = "Erreur : Le fichier indique un caractere de nombre de lignes incorrect";
-	errors[6] = "Erreur : Le fichier indique un caractere de nombres de colonnes incorrect";
-	errors[7] = "Erreur : Le fichier possede des donnees non prises en charge";
-	errors[8] = "Erreur : Le fichier indique des dimensions non compatibles avec les donnees";
-	errors[11] = "Erreur : Nombre de colonnes ou nombre de lignes nul";
-	errors[12] = "Erreur : Tableau de donnees vide ou inexistant (null)";
-	errors[51] = "Erreur : Les dimensions des matrices ne sont pas egales";
-	errors[52] = "Erreur : Les dimensions des matrices ne sont pas compatibles pour cette operation";
-	errors[53] = "Erreur : La division par 0 est interdite";
+
+	// Erreurs générales
+	errors[1] = "Erreur : Allocation non réussie";
+	errors[2] = "Erreur : Indice supérieur à la liste";
+	errors[3] = "Erreur : Liste vide";
+	errors[4] = "Erreur : Argument null";
+
+	// Erreurs liee aux sommets 
+	errors[11] = "Erreur : Identifiant de sommet negatif";
+	errors[12] = "Erreur : Sommet deja existant";
+	errors[13] = "Erreur : Sommet introuvable";
+
+	// Erreurs liee aux arcs
+	errors[21] = "Erreur : Identifiant d'arc négatif";
+	errors[22] = "Erreur : Arc déjà existant";
+	errors[23] = "Erreur : Arc introuvable";
+
+	// Erreur liee au parseur
+	errors[31] = "Erreur : Erreur de syntaxe";
+	errors[32] = "Erreur : Le fichier spécifié est vide";
+	errors[33] = "Erreur : Flux de lecture de fichier corrompu";
 }
 
 // Methods

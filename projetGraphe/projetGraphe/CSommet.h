@@ -3,20 +3,23 @@
 #include "CArc.h"
 using namespace std;
 
+// Constante d'erreurs liees aux operations sur un sommet
+#define wrongIndiceSommet 11
+
 class CSommet {
 
 private:
 	int eIdSommet; // Id du sommet
 
 	int eSizeDispoArrivant; // Place dispo pour Arrivant
-	int eSizeArrivant; // Place utilisé pour Arrivant
+	int eSizeArrivant; // Place utilise pour Arrivant
 	CArc** cArcArrivant; // Liste des arcs arrivants
 
 	int eSizeDispoPartant; // Place dispo pour Partant
-	int eSizePartant; // Place utilisé pour Partant
+	int eSizePartant; // Place utilise pour Partant
 	CArc** cArcPartant; // Liste des arcs partants
 
-	// Accesseurs et methodes en prive pour des raisons de sécurité de gestion de liste
+	// Accesseurs et methodes en prive pour des raisons de sécurite de gestion de liste
 	void setArcArrivant(CArc** liste);
 	void setSizeDispoArrivant(int sizeDispoArrivant);
 	void setSizeArrivant(int sizeArrivant);
@@ -27,7 +30,7 @@ private:
 
 public:
 	// Constructeurs
-	CSommet(); // Par défaut
+	CSommet(); // Par defaut
 	CSommet(int idSommet);
 	CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** listePartant);
 	CSommet(const CSommet& m); // Par recopie
