@@ -13,11 +13,12 @@ CCalculCouple::CCalculCouple(CGraphe* G) {
 	eSize = 0;
 	listeArcGraphe = createListeArc(NULL, eSizeDispo, eSize);
 
+	// Création de la liste du CouplageMax
 	eSizeDispoCouplage = 5;
 	eSizeCouplage = 0;
 	listeCouplageMax = NULL;
 
-	// Attribution des arretes du graphe dans couplageBase
+	// Attribution des arretes du graphe dans A
 	for (int i = 0; i < cGraphe->getSize(); i++) {
 		for (int y = 0; y < cGraphe->getSommetListe()[i]->getSize(); y++) {
 			if (containsListeElem(listeArcGraphe, eSize, cGraphe->getSommetListe()[i]->getArcListe()[y]) == 0) {
@@ -26,11 +27,18 @@ CCalculCouple::CCalculCouple(CGraphe* G) {
 		}
 	}
 
-	// Calcul du couple max
+	// Création de la liste du couplage en cours de calcul
 	int sizeDispoCouplage = 5;
 	int sizeCouplage = 0;
 	CArc** couplage = createListeArc(NULL, sizeDispoCouplage, sizeCouplage);
+	
+	// Calcul du couple max
 	calcCoupMax(couplage, sizeCouplage, sizeDispoCouplage);
+}
+
+CCalculCouple::~CCalculCouple() {
+	free(listeCouplageMax);
+	free(listeArcGraphe);
 }
 
 
@@ -43,17 +51,22 @@ int CCalculCouple::getSizeCouplage() {
 	return eSizeCouplage;
 }
 
-// Permet de calculer le couplage maximum d'un graphe non orienté
+
+
+/*
+##################
+	METHODES
+##################
+*/
 void CCalculCouple::calcCoupMax(CArc** couplage, int sizeCouplage, int sizeDispoCouplage) {
 	
 	// Si la taille de la liste des arcs vaut 0
 	if (eSize == 0) {
 		
-		// Si la taille du couplage actuelle est plus grande que le couplage max actuel
+		// Si la taille du couplage calcule est plus grande que notre CouplageMax
 		if (sizeCouplage > eSizeCouplage){
-			// Desallocation de listeArcGraphe
 			
-			// Le couplage max devient alors ce couplage ci
+			// Le CouplageMax devient alors le couplage calcule
 			listeCouplageMax = couplage; 
 			eSizeCouplage = sizeCouplage;
 			eSizeDispoCouplage = sizeDispoCouplage;
@@ -63,7 +76,7 @@ void CCalculCouple::calcCoupMax(CArc** couplage, int sizeCouplage, int sizeDispo
 	// Sinon
 	else {
 		
-		// On crée la liste pour les arcs qu'il faurdra ajouter de nouveau à la fin
+		// On cree la liste pour les arcs qu'il faudra ajouter de nouveau à la fin
 		int sizeToReput = 0;
 		int sizeDispoToReput = 5;
 		CArc** listeArcToReput = createListeArc(NULL, sizeDispoToReput, sizeToReput);
@@ -71,33 +84,36 @@ void CCalculCouple::calcCoupMax(CArc** couplage, int sizeCouplage, int sizeDispo
 		// Pour chaque arc du graphe
 		for (int i = 0; i < eSize; i++) {
 			
-			// On ajoute dans le couplage un arc fait à partir du constructeur de recopie
+			// On recupere d'abord l'arc sur lequel on va travailler car il sera supprimer de A
 			CArc* newArc = new CArc(*listeArcGraphe[i]);
+
+			// On ajoute dans le couplage l'arc d'indice i dans A
 			couplage = ajouterListe(couplage, &sizeDispoCouplage, &sizeCouplage, listeArcGraphe[i]);
 			
 			// On ajoute également cet arc dans la liste des arcs qui devront être remis dans le graphe à la fin de l'algo
 			listeArcToReput = ajouterListe(listeArcToReput, &sizeDispoToReput, &sizeToReput, listeArcGraphe[i]);
 			
-			// On supprime cet arc du graphe
+			// On supprime cet arc de A
 			supprimerListe(listeArcGraphe, i, &eSize);
 			
-			// On regarde si dans la liste des arcs il y a des arcs qui ont des sommets en commum avec l'arc sur lequel on travaille
+			// On regarde si dans la liste des arcs de A, il y a des arcs qui ont des sommets en commum avec l'arc sur lequel on travaille
 			for (int y = 0; y < eSize; y++) {
 				if (newArc->getId1() == listeArcGraphe[y]->getId1() || newArc->getId2() == listeArcGraphe[y]->getId1() ||
 					newArc->getId1() == listeArcGraphe[y]->getId2() || newArc->getId2() == listeArcGraphe[y]->getId2()) {
 					
-					// On supprime également ces arcs et on les ajoute dans la liste des arcs à rajouter à la fin de l'algo
+					// On supprime également ces arcs de A et on les ajoute dans la liste des arcs à rajouter à la fin de l'algo
 					listeArcToReput = ajouterListe(listeArcToReput, &sizeDispoToReput, &sizeToReput, listeArcGraphe[y]);
 					supprimerListe(listeArcGraphe, y, &eSize);
 					y--;
 				}
 			}
+			delete newArc;
 			
 			// Fonction récursive
 			calcCoupMax(couplage, sizeCouplage, sizeDispoCouplage);
 			i = eSize - 1;
 			
-			// On remet dans le graphe les arcs précédemment enlevés
+			// On remet dans le graphe les arcs précédemment enlevés de A
 			for (int y = 0; y < sizeToReput; y++) {
 				if (containsListeElem(listeArcGraphe, eSize, listeArcToReput[y]) == 0) {
 					listeArcGraphe = ajouterListe(listeArcGraphe, &eSizeDispo, &eSize, listeArcToReput[y]);
@@ -106,17 +122,21 @@ void CCalculCouple::calcCoupMax(CArc** couplage, int sizeCouplage, int sizeDispo
 					i++;
 				}
 			}
+			free(listeArcToReput);
 		}
 	}
 }
 
-// Permet à partir d'un couplage de créer le graphe correspondant
+// Permet a partir d'un couplage de creer le graphe correspondant
 CGraphe* CCalculCouple::setToGraphe() {
+	// Pas besoin de verification car cette methode ne pourra pas être appeles si on a pas appeles le constructeur qui appelle forcement calcCoupMax
 	CGraphe* res = new CGraphe();
 	for (int i = 0; i < cGraphe->getSize(); i++) {
+		// On ajoute les sommets du graphe de base
 		ajouterSommetGraphe(res, cGraphe->getSommetListe()[i]->getIdSommet());
 	}
 	for (int i = 0; i < eSizeCouplage; i++) {
+		// On rajoute les arcs calcules par la fonction calcCoupMax
 		ajouterArcSommet(res->getSommet(listeCouplageMax[i]->getId1()), res->getSommet(listeCouplageMax[i]->getId2()));
 	}
 	return res;

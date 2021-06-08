@@ -85,6 +85,7 @@ CGraphe::~CGraphe() {
 	if (cSommetListe != NULL) {
 		for (int i = 0; i < eSize; ++i) {
 			supprimerSommetGraphe(this, cSommetListe[i]);
+			i--;
 		}
 		free(cSommetListe);
 	}
@@ -123,7 +124,7 @@ void CGraphe::setSizeDispo(int sizeDispo) {
 
 /*
 ##################
-	METHODS
+	METHODES
 ##################
 */
 
