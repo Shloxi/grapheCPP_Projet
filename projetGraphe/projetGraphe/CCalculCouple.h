@@ -17,7 +17,10 @@ private :
 	int eSizeCouplage;
 	int eSizeDispoCouplage;
 public :
+	// Constructeur
 	CCalculCouple(CGraphe* G);
+	
+	// Méthodes
 	void calcCoupMax(CArc** couplage, int sizeCouplage, int sizeDispoCouplage);
 	CArc** getListeCouplageMax();
 	int getSizeCouplage();
