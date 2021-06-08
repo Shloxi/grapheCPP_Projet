@@ -65,3 +65,32 @@ template <typename T> static void afficherListe(T** liste, const int size, const
 	}
 }
 
+template <typename T> static int containsListe(T** liste1, int size1, T** liste2, int size2) {
+	int contains = 0;
+	if (liste1 == liste2) {
+		return 0; // Erreur 
+	}
+	for (int i = 0; i < size1; i++) {
+		for (int y = 0; y < size2; y++) {
+			if (liste1[i] == liste2[y]) {
+				contains = 1;
+			}
+		}
+	}
+	return contains;
+}
+
+template <typename T> static int containsListeElem(T** liste, int size, T*elem) {
+	int contains = 0;
+	if (size == 0) {
+		return 0;
+	}
+	for (int i = 0; i < size; i++) {
+		if (liste[i] == elem) {
+			contains = 1;
+		}
+	}
+	return contains;
+}
+
+

@@ -5,34 +5,27 @@ using namespace std;
 
 // Constante d'erreurs liees aux operations sur un sommet
 #define wrongIndiceSommet 11
+#define wrongIndiceArc 21
 
 class CSommet {
 
 private:
 	int eIdSommet; // Id du sommet
 
-	int eSizeDispoArrivant; // Place dispo pour Arrivant
-	int eSizeArrivant; // Place utilise pour Arrivant
-	CArc** cArcArrivant; // Liste des arcs arrivants
-
-	int eSizeDispoPartant; // Place dispo pour Partant
-	int eSizePartant; // Place utilise pour Partant
-	CArc** cArcPartant; // Liste des arcs partants
+	int eSizeDispo; // Place dispo
+	int eSize; // Place utilise
+	CArc** cArcListe; // Liste des arcs
 
 	// Accesseurs et methodes en prive pour des raisons de sécurite de gestion de liste
-	void setArcArrivant(CArc** liste);
-	void setSizeDispoArrivant(int sizeDispoArrivant);
-	void setSizeArrivant(int sizeArrivant);
-
-	void setArcPartant(CArc** liste);
-	void setSizeDispoPartant(int sizeDispoPartant);
-	void setSizePartant(int sizePartant);
+	void setArcListe(CArc** liste);
+	void setSizeDispo(int sizeDispo);
+	void setSize(int size);
 
 public:
 	// Constructeurs
 	CSommet(); // Par defaut
 	CSommet(int idSommet);
-	CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** listePartant);
+	CSommet(int eId, int eSize, CArc** liste);
 	CSommet(const CSommet& m); // Par recopie
 	~CSommet(); // Destructeur
 
@@ -40,26 +33,15 @@ public:
 	int getIdSommet() const;
 	void setIdSommet(int idSommet);
 
-	int getSizeDispoArrivant() const;
-	int getSizeArrivant() const;
-	CArc** getArcArrivant() const;
-
-	int getSizeDispoPartant() const;
-	int getSizePartant() const;
-	CArc** getArcPartant() const;
+	int getSizeDispo() const;
+	int getSize() const;
+	CArc** getArcListe() const;
 	
 
 	//Methodes
-	void ajouterArcArrivant(CArc* arc);
-	void supprimerArcArrivant(int indiceArc);
-	void modifierArcArrivant(int indiceArc, int newId);
-	void modifierListeArrivant(CArc** listeArrivant, int size);
-
-	void ajouterArcPartant(CArc* arc);
-	void supprimerArcPartant(int indiceArc);
-	void modifierArcPartant(int indiceArc, int newId);
-	void modifierListePartant(CArc** listePartant, int size);
-	void reverseArc();
+	void ajouterArc(CArc* arc);
+	void supprimerArc(int indiceArc);
+	void modifierListe(CArc** liste, int size);
 	ostream& display(ostream& os) const;
 };
 

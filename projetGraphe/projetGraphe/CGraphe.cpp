@@ -3,7 +3,6 @@
 #include <fstream>
 #include "CGraphe.h"
 #include "CGrapheOperation.cpp"
-#include "CListeOperation.cpp"
 #include "Parser.cpp"
 #include "CException.h"
 using namespace std;
@@ -16,7 +15,7 @@ using namespace std;
 CGraphe::CGraphe() {
 	eSize = 0;
 	eSizeDispo = 0;
-	cSommetListe = createListeSommet(NULL, eSizeDispo, eSize);
+	cSommetListe = NULL;
 }
 
 CGraphe::CGraphe(int size, CSommet** liste) {
@@ -71,9 +70,10 @@ CGraphe::CGraphe(const char* filename) {
 		sscanf_s(valeurs[i+1], "%d", &nombre1);
 		compare(valeurs[i+2], "Fin");
 		sscanf_s(valeurs[i+3], "%d", &nombre2);
-		ajouterArcSommet(this->getSommet(nombre2), this->getSommet(nombre1));
+		ajouterArcSommet(this->getSommet(nombre1), this->getSommet(nombre2));
 	}
 	indice += (4 * nbArcs);
+	compare(valeurs[indice], "]");
 	// On libère notre tableau de valeurs
 	for (int i = 0; i < 100; ++i) {
 		free(valeurs[i]);
@@ -82,9 +82,9 @@ CGraphe::CGraphe(const char* filename) {
 }
 
 CGraphe::~CGraphe() {
-	if (cSommetListe) {
+	if (cSommetListe != NULL) {
 		for (int i = 0; i < eSize; ++i) {
-			delete cSommetListe[i];
+			supprimerSommetGraphe(this, cSommetListe[i]);
 		}
 		free(cSommetListe);
 	}
@@ -150,6 +150,15 @@ CSommet* CGraphe::getSommet(int idSommet) {
 	for (int i = 0; i < eSize; i++) {
 		if (idSommet == cSommetListe[i]->getIdSommet()) {
 			return cSommetListe[i];
+		}
+	}
+	throw CException(missingSommet); // Sommet introuvable
+}
+
+int CGraphe::getSommet(CSommet* sommet) {
+	for (int i = 0; i < eSize; i++) {
+		if (sommet == cSommetListe[i]) {
+			return i;
 		}
 	}
 	throw CException(missingSommet); // Sommet introuvable

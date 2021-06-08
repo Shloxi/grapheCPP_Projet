@@ -8,21 +8,21 @@ using namespace std;
 class CArc {
 
 private:
-	int eIdDest; // Id du sommet de destination
+	int eIdSommet1; // Id du sommet 1
+	int eIdSommet2; // Id du sommet 2
 
 public:
 	// Constructeurs
 	CArc(); // Par defaut
-	CArc(int eId);
+	CArc(int eId1, int eId2);
 	CArc(const CArc& a); // Par recopie
 
 	// Accesseurs
-	int getIdDest() const;
-	void setIdDest(int eId);
-	ostream& display(ostream& os) const;
+	int getId1() const;
+	void setId1(int eId);
+	int getId2() const;
+	void setId2(int eId);
 };
-
-ostream& operator<<(ostream& os, CArc* const A);
 
 #endif // !CArc_h
 

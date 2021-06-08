@@ -1,60 +1,47 @@
 #include <iostream>
 
+#include "windows.h"
+#define _CRTDBG_MAP_ALLOC //to get more details
+#include <crtdbg.h>   //for malloc and free
 
 #include <iostream>
 #include "CGraphe.h"
 #include "CSommet.h"
 #include "CArc.h"
+#include "CCalculCouple.h"
 #include "CGrapheOperation.cpp"
 #include "CException.h"
 
 int main(int argc, char** argv)
 {
+    _CrtMemState sOld;
+    _CrtMemState sNew;
+    _CrtMemState sDiff;
     cout << "Bienvenue sur le programme de Hugo PERVEYRIE et Romuald DURET !\n";
-    if (argc == 1) {
-        cout << "Vous n'avez pas rentrer d'argument" << endl;
-        return 0;
+    // Création des graphes
+    _CrtMemCheckpoint(&sOld); //take a snapshot
+    try {
+        CGraphe* graphe1 = new CGraphe("grapheToWrite.txt");
+        cout << graphe1 << endl;
+        CCalculCouple* calculCouple = new CCalculCouple(graphe1);
+        CGraphe* newGraphe = calculCouple->setToGraphe();
+        cout << "GRAPHE DE COUPLAGE MAXIMAL :" << endl;
+        cout << newGraphe << endl;
+        delete graphe1;
+        delete newGraphe;
+        _CrtMemCheckpoint(&sNew); //take a snapshot
     }
-    else if (argc > 20) {
-        cout << "Vous avez rentrer plus de 20 arguments" << endl;
-        return 0;
+    catch (CException e) {
+        cerr << e.errors[e.ExceptGetIndexError()] << endl << endl;
     }
-    else {
-        // Création des graphes
-        int cptErreur = 0;
-        int tailleTableau = 0;
-        CGraphe** listeGraphe = (CGraphe**)malloc(sizeof(CGraphe*) * 20);
-        if (!listeGraphe) {
-            cout << "Erreur d'allocation dans le main" << endl;
-            return 0;
-        }
-        for (int i = 0; i < argc - 1; ++i) {
-            try {
-                listeGraphe[i - cptErreur] = new CGraphe(argv[i+1]);
-                ++tailleTableau;
-            }
-            catch (CException e) {
-                cerr << e.errors[e.ExceptGetIndexError()] << endl << endl;
-                ++cptErreur;
-            }
-        }
-        if (tailleTableau != 0) {
-            try {
-                for (int i = 0; i < tailleTableau; i++) {
-                    cout << listeGraphe[i] << endl;
-                    reverseGraphe(listeGraphe[i]);
-                    cout << "INVERSION DU GRAPHE" << endl;
-                    cout << listeGraphe[i] << endl;
-                }
-            }
-            catch (CException e) {
-                cerr << e.errors[e.ExceptGetIndexError()] << endl << endl;
-            }
-            for (int i = 0; i < tailleTableau; i++) {
-                delete listeGraphe[i];
-            }
-            free(listeGraphe);
-        }
-        return 0;
+    if (_CrtMemDifference(&sDiff, &sOld, &sNew)) // if there is a difference
+    {
+        OutputDebugString(L"-----------_CrtMemDumpStatistics ---------");
+        _CrtMemDumpStatistics(&sDiff);
+        OutputDebugString(L"-----------_CrtMemDumpAllObjectsSince ---------");
+        _CrtMemDumpAllObjectsSince(&sOld);
+        OutputDebugString(L"-----------_CrtDumpMemoryLeaks ---------");
+        _CrtDumpMemoryLeaks();
     }
+    return 0;
 }

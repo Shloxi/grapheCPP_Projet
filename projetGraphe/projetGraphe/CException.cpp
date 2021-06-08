@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include "CException.h"
 
 // Construction
@@ -6,10 +7,12 @@ CException::CException() {
 	eIndexError = 0;
 
 	errors = new const char* [100];
-	for (int i = 0; i < 100; ++i) {
+	for (int i = 0; i < 100; i++) {
 		errors[i] = new char[100];
+		for (int j = 0; j < 20; j++) {
+			errors[i] = 0;
+		}
 	}
-
 	// Erreurs générales
 	errors[1] = "Erreur : Allocation non réussie";
 	errors[2] = "Erreur : Indice supérieur à la liste";

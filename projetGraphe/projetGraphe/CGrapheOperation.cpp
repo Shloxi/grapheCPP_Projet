@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "CException.h"
+#include "CListeOperation.cpp"
 #include "CArc.h"
 #include "CSommet.h"
 #include "CGraphe.h"
@@ -46,49 +47,45 @@ static CSommet** createListeSommet(CSommet** liste, int sizeDispo, int size) {
 	return newListe;
 }
 
-static void ajouterArcSommet(CSommet* SommetArrivant, CSommet* SommetPartant) {
-	if (SommetArrivant == NULL || SommetPartant == NULL) {
+static void ajouterArcSommet(CSommet* Sommet1, CSommet* Sommet2) {
+	if (Sommet1 == NULL || Sommet2 == NULL) {
 		throw CException(nullArgument); // Argument null
 	}
-	for (int i = 0; i < SommetPartant->getSizePartant(); i++) {
-		if (SommetPartant->getArcPartant()[i]->getIdDest() == SommetArrivant->getIdSommet()) {
+	for (int i = 0; i < Sommet1->getSize(); i++) {
+		if (containsListe(Sommet1->getArcListe(), Sommet1->getSize(), Sommet2->getArcListe(), Sommet2->getSize())) {
 			throw CException(existingArc); // Arc déja existant
 		}
 	}
 	// On creer un arc et on l'ajoute dans les listes correspondantes dans les sommets
-	CArc* newArc = new CArc(SommetArrivant->getIdSommet());
-	SommetArrivant->ajouterArcArrivant(newArc);
-	SommetPartant->ajouterArcPartant(newArc);
+	CArc* newArc = new CArc(Sommet1->getIdSommet(), Sommet2->getIdSommet());
+	Sommet1->ajouterArc(newArc);
+	Sommet2->ajouterArc(newArc);
 }
 
-static void supprimerArcSommet(CSommet* SommetArrivant, CSommet* SommetPartant) {
-	if (SommetArrivant == NULL || SommetPartant == NULL) {
+static void supprimerArcSommet(CSommet* Sommet1, CSommet* Sommet2) {
+	if (Sommet1 == NULL || Sommet2 == NULL) {
 		throw CException(nullArgument); // Argument null
 	}
-	CArc* toDelete = NULL;
-	int indicePartant = -1;
-	// On cherche l'arc dans la liste des sommetsPartants
-	for (int i = 0; i < SommetPartant->getSizePartant(); ++i) {
-		if (SommetPartant->getArcPartant()[i]->getIdDest() == SommetArrivant->getIdSommet()) {
-			toDelete = SommetPartant->getArcPartant()[i];
-			SommetPartant->supprimerArcPartant(i);
-		}
-	}
-	// On cherche l'arc dans la liste des sommetsArrivants
-	if (toDelete) {
-		for (int i = 0; i < SommetArrivant->getSizeArrivant(); ++i) {
-			if (SommetArrivant->getArcArrivant()[i] == toDelete) {
-				SommetArrivant->supprimerArcArrivant(i);
-			}
-		}
-		// On supprime cet arc de la memoire apres toutes les operations
-		delete toDelete;
-	}
-	// Si on ne trouve pas l'arc on retourne une erreur
-	else {
+	if (!containsListe(Sommet1->getArcListe(), Sommet1->getSize(), Sommet2->getArcListe(), Sommet2->getSize())) {
 		throw CException(missingArc); // Arc introuvable
 	}
-	
+	if (Sommet1 == Sommet2) {
+		throw CException(); // SommetIdentique
+	}
+	int indice1 = 0;
+	int indice2 = 0;
+	for (int i = 0; i < Sommet1->getSize(); i++) {
+		for (int y = 0; y < Sommet2->getSize(); y++) {
+			if (Sommet1->getArcListe()[i] == Sommet2->getArcListe()[y]) {
+				indice1 = i;
+				indice2 = y;
+			}
+		}
+	}
+	CArc* toDelete = Sommet1->getArcListe()[indice1];
+	Sommet1->supprimerArc(indice1);
+	Sommet2->supprimerArc(indice2);
+	delete toDelete;
 }
 
 static void ajouterSommetGraphe(CGraphe* G, int idSommet) {
@@ -113,44 +110,21 @@ static void supprimerSommetGraphe(CGraphe* G, CSommet* S) {
 	if (S == NULL || G == NULL) {
 		throw CException(nullArgument); // Argument null
 	}
-	int indiceSommet = -1;
-	// On parcours la liste des arcs partants de notre sommets
-	for (int i = 0; i < S->getSizePartant(); i++) {
-		// On les supprime un a un
-		supprimerArcSommet(G->getSommet(S->getArcPartant()[i]->getIdDest()), S);
-	}
+	int indiceSommet = G->getSommet(S);
+
+	
 	// On parcours la liste des sommets
 	for (int i = 0; i < G->getSize(); i++) {
-		// On recupere l'indice du sommet dans notre liste de sommets
-		if (G->getSommetListe()[i]->getIdSommet() == S->getIdSommet()) {
-			indiceSommet = i;
-		}
-		// On parcours la liste des arcs partants des autres sommets
-		for (int y = 0; y < G->getSommetListe()[i]->getSizePartant(); y++) {
+		// On parcours la liste des arcs des autres sommets
+		for (int y = 0; y < G->getSommetListe()[i]->getSize(); y++) {
 			// Si un arc est en direction de notre sommet
-			if (S->getIdSommet() == G->getSommetListe()[i]->getArcPartant()[y]->getIdDest()) {
+			if (containsListe(S->getArcListe(), S->getSize(), G->getSommetListe()[i]->getArcListe(), G->getSommetListe()[i]->getSize()) && S != G->getSommetListe()[i]) {
 				// On le supprime
 				supprimerArcSommet(S, G->getSommetListe()[i]);
 			}
 		}
 	}
-	// Si on a pas trouve le sommet dans le graphe
-	if (indiceSommet >= 0) {
-		G->supprimerSommet(indiceSommet);
-	}
-	// On retourne une erreur
-	else {
-		throw CException(missingSommet);
-	}
+	G->supprimerSommet(indiceSommet);
 	// On supprime le sommet de la memoire apres toutes operations
 	delete S;
-}
-
-
-static void reverseGraphe(CGraphe* G) {
-	// Pour chaque sommet dans le graphe
-	for (int i = 0; i < G->getSize(); i++) {
-		// On inverse les listes du sommets a l'aide de la fonction reverseArc
-		G->getSommetListe()[i]->reverseArc();
-	}
 }

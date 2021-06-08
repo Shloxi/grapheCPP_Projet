@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -5,46 +6,34 @@
 #include "CException.h"
 using namespace std;
 
-/*
-##################
-  CONSTRUCTEURS
-##################
-*/
 CArc::CArc() {
-	eIdDest = -1;
+	eIdSommet1 = -1;
+	eIdSommet2 = -1;
 }
 
-CArc::CArc(int eId) {
-	eIdDest = eId;
+CArc::CArc(int eId1, int eId2) {
+	eIdSommet1 = eId1;
+	eIdSommet2 = eId2;
 }
 
 CArc::CArc(const CArc& a) {
-	eIdDest = a.eIdDest;
+	eIdSommet1 = a.eIdSommet1;
+	eIdSommet2 = a.eIdSommet2;
 }
 
-/*
-##################
-	ACCESSEURS
-##################
-*/
-int CArc::getIdDest() const {
-	return eIdDest;
+
+int CArc::getId1() const {
+	return eIdSommet1;
 }
 
-void CArc::setIdDest(int eId) {
-	eIdDest = eId;
+void CArc::setId1(int eId) {
+	eIdSommet1 = eId;
 }
 
-ostream& CArc::display(ostream& os) const {
-	if (eIdDest == -1) {
-		throw CException(wrongIndiceArc); // idArc négative
-	}
-	else {
-		os << eIdDest << " ";
-	}
+int CArc::getId2() const {
+	return eIdSommet2;
 }
 
-ostream& operator<<(ostream& os, CArc* const A) {
-	A->display(os);
-	return os;
+void CArc::setId2(int eId) {
+	eIdSommet2 = eId;
 }

@@ -3,7 +3,6 @@
 #include <fstream>
 #include "CSommet.h"
 #include "CException.h"
-#include "CListeOperation.cpp"
 #include "CGrapheOperation.cpp"
 using namespace std;
 
@@ -15,69 +14,48 @@ using namespace std;
 CSommet::CSommet() {
 	eIdSommet = -1;
 
-	eSizeDispoArrivant = 0;
-	eSizeArrivant = 0;
-	cArcArrivant = createListeArc(NULL, eSizeDispoArrivant, eSizeArrivant);
-
-	eSizeDispoPartant = 0;
-	eSizePartant = 0;
-	cArcPartant = createListeArc(NULL, eSizeDispoArrivant, eSizeArrivant);
+	eSizeDispo = 0;
+	eSize = 0;
+	cArcListe = createListeArc(NULL, eSizeDispo, eSize);
 }
 
 CSommet::CSommet(int idSommet) {
 	eIdSommet = idSommet;
 
-	eSizeDispoArrivant = 5;
-	eSizeArrivant = 0;
-	cArcArrivant = createListeArc(NULL, eSizeDispoArrivant, eSizeArrivant);
-
-	eSizeDispoPartant = 5;
-	eSizePartant = 0;
-	cArcPartant = createListeArc(NULL, eSizeDispoPartant, eSizePartant);
+	eSizeDispo = 5;
+	eSize = 0;
+	cArcListe = createListeArc(NULL, eSizeDispo, eSize);
 }
 
-CSommet::CSommet(int eId, int eSizeA, int eSizeP, CArc** listeArrivant, CArc** listePartant) {
+CSommet::CSommet(int eId, int eSize, CArc** liste) {
 	eIdSommet = eId;
 
-	eSizeArrivant = eSizeA;
-	eSizeDispoArrivant = (eSizeArrivant / 5 + 1) * 5;
+	eSize = eSize;
+	eSizeDispo = (eSize / 5 + 1) * 5;
 
-	cArcArrivant = createListeArc(listeArrivant, eSizeDispoArrivant, eSizeArrivant);
-
-	eSizePartant = eSizeP;
-	eSizeDispoPartant = (eSizePartant / 5 + 1) * 5;
-
-	cArcPartant = createListeArc(listePartant, eSizeDispoPartant, eSizePartant);
+	cArcListe = createListeArc(liste, eSizeDispo, eSize);
 }	
 
 CSommet::CSommet(const CSommet& m) {
 	eIdSommet = m.eIdSommet;
 
-	eSizeArrivant = m.eSizeArrivant;
-	eSizeDispoArrivant = m.eSizeDispoArrivant;
+	eSize = m.eSize;
+	eSizeDispo = m.eSizeDispo;
 
-	cArcArrivant = createListeArc(m.cArcArrivant, eSizeDispoArrivant, eSizeArrivant);
-
-	eSizePartant = m.eSizePartant;
-	eSizeDispoPartant = m.eSizeDispoPartant;
-
-	cArcPartant = createListeArc(m.cArcPartant, eSizeDispoPartant, eSizePartant);
+	cArcListe = createListeArc(m.cArcListe, eSizeDispo, eSize);
 }
 
 
 CSommet::~CSommet() {
-	if (cArcArrivant) {
-		for (int i = 0; i < eSizeArrivant; ++i) {
-			if (cArcArrivant[i]) {
-				delete cArcArrivant[i];
+	if (cArcListe != NULL) {
+		for (int i = 0; i < eSize; ++i) {
+			if (cArcListe[i]) {
+				delete cArcListe[i];
 			}
 		}
-		free(cArcArrivant);
+		free(cArcListe);
 	}
-	if (cArcPartant) {
-		free(cArcPartant);
-	}
-} 
+}
 
 
 /*
@@ -93,57 +71,30 @@ void CSommet::setIdSommet(int idSommet) {
 	eIdSommet = idSommet;
 }
 
-
-// Accesseurs Arrivant
-int CSommet::getSizeDispoArrivant() const {
-	return eSizeDispoArrivant;
+int CSommet::getSizeDispo() const {
+	return eSizeDispo;
 }
 
-void CSommet::setSizeDispoArrivant(int sizeDispoArrivant) {
-	eSizeDispoArrivant = sizeDispoArrivant;
+void CSommet::setSizeDispo(int sizeDispo) {
+	eSizeDispo = sizeDispo;
 }
 
-int CSommet::getSizeArrivant() const {
-	return eSizeArrivant;
+int CSommet::getSize() const {
+	return eSize;
 }
 
-void CSommet::setSizeArrivant(int sizeArrivant) {
-	eSizeArrivant = sizeArrivant;
+void CSommet::setSize(int size) {
+	eSize = size;
 }
 
-CArc** CSommet::getArcArrivant() const {
-	return cArcArrivant;
+CArc** CSommet::getArcListe() const {
+	return cArcListe;
 }
 
-void CSommet::setArcArrivant(CArc** liste) {
-	cArcArrivant = liste;
+void CSommet::setArcListe(CArc** liste) {
+	cArcListe = liste;
 }
 
-
-// Accesseurs Partant
-int CSommet::getSizeDispoPartant() const {
-	return eSizeDispoPartant;
-}
-
-void CSommet::setSizeDispoPartant(int sizeDispoPartant) {
-	eSizeDispoPartant = sizeDispoPartant;
-}
-
-int CSommet::getSizePartant() const {
-	return eSizePartant;
-}
-
-void CSommet::setSizePartant(int sizePartant) {
-	eSizePartant = sizePartant;
-}
-
-CArc** CSommet::getArcPartant() const {
-	return cArcPartant;
-}
-
-void CSommet::setArcPartant(CArc** liste) {
-	cArcPartant = liste;
-}
 
 /*
 ##################
@@ -151,62 +102,19 @@ void CSommet::setArcPartant(CArc** liste) {
 ##################
 */
 // Arrivant
-void CSommet::ajouterArcArrivant(CArc* arc) {
-	CArc** liste = ajouterListe(cArcArrivant, &eSizeDispoArrivant, &eSizeArrivant, arc);
-	setArcArrivant(liste);
+void CSommet::ajouterArc(CArc* arc) {
+	CArc** liste = ajouterListe(cArcListe, &eSizeDispo, &eSize, arc);
+	setArcListe(liste);
 }
 
-void CSommet::supprimerArcArrivant(int indiceArc) {
-	supprimerListe(cArcArrivant, indiceArc, &eSizeArrivant);
+void CSommet::supprimerArc(int indiceArc) {
+	supprimerListe(cArcListe, indiceArc, &eSize);
 }
 
-void CSommet::modifierArcArrivant(int indiceArc, int newId=-1) {
-	cArcArrivant[indiceArc]->setIdDest(newId);
-}
-
-void CSommet::modifierListeArrivant(CArc** listeArrivant, int size) {
-	eSizeArrivant = size;
-	eSizeDispoArrivant = (eSizeArrivant / 5 + 1) * 5;
-	cArcArrivant = createListeArc(listeArrivant, eSizeDispoArrivant, eSizeArrivant);
-}
-
-
-// Partant
-void CSommet::ajouterArcPartant(CArc* arc) {
-	CArc** liste = ajouterListe(cArcPartant, &eSizeDispoPartant, &eSizePartant, arc);
-	setArcPartant(liste);
-}
-
-void CSommet::supprimerArcPartant(int indiceArc) {
-	supprimerListe(cArcPartant, indiceArc, &eSizePartant);
-}
-
-void CSommet::modifierListePartant(CArc** listePartant, int size) {
-	eSizePartant = size;
-	eSizeDispoPartant = (eSizePartant / 5 + 1) * 5;
-	cArcPartant = createListeArc(listePartant, eSizeDispoPartant, eSizePartant);
-}
-
-void CSommet::modifierArcPartant(int indiceArc, int newId=-1) {
-	cArcPartant[indiceArc]->setIdDest(newId);
-}
-
-void CSommet::reverseArc() {
-	// Cette fonction va inverser les deux listes
-	for (int i = 0; i < eSizePartant; i++) {
-		cArcPartant[i]->setIdDest(eIdSommet);
-
-	}
-	CArc** oldArcArrivant = cArcArrivant;
-	int oldSizeArrivant = eSizeArrivant;
-	int oldSizeDispoArrivant = eSizeDispoArrivant;
-
-	cArcArrivant = cArcPartant;
-	cArcPartant = oldArcArrivant;
-	eSizeArrivant = eSizePartant;
-	eSizePartant = oldSizeArrivant;
-	eSizeDispoArrivant = eSizeDispoPartant;
-	eSizeDispoPartant = oldSizeDispoArrivant;
+void CSommet::modifierListe(CArc** liste, int size) {
+	eSize = size;
+	eSizeDispo = (eSize / 5 + 1) * 5;
+	cArcListe = createListeArc(liste, eSizeDispo, eSize);
 }
 
 ostream& CSommet::display(ostream& os) const{
@@ -216,13 +124,23 @@ ostream& CSommet::display(ostream& os) const{
 	else {
 		os << "-------------------------------------" << endl;
 		os << "Sommet " << eIdSommet << ":" << endl;
-		if (eSizePartant == 0) {
+		if (eSize == 0) {
 			os << "Aucun Arc Partant !" << endl;
 		}
 		else {
-			afficherListe(cArcPartant, eSizePartant, "Liste Arc Partant : ", os);
+			for (int i = 0; i < eSize; i++) {
+				if (cArcListe[i]->getId1() == eIdSommet) {
+					os << cArcListe[i]->getId2() << " ";
+				}
+				else if (cArcListe[i]->getId2() == eIdSommet) {
+					os << cArcListe[i]->getId1() << " ";
+				}
+				else {
+					throw CException(wrongIndiceArc);
+				}
+			}
+			os << endl;
 		}
-		os << "Nombre d'Arc Arrivant : " << eSizeArrivant << endl;
 	}
 	return os;
 }

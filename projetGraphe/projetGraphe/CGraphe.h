@@ -37,6 +37,7 @@ public:
 	void modifierSommetId(int indiceSommet, int newId);
 	void modifierSommetListe(CSommet** sommetListe, int size);
 	CSommet* getSommet(int idSommet);
+	int getSommet(CSommet* sommet);
 	ostream& display(ostream& os) const;
 };
 

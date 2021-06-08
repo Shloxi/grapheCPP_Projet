@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CArc.cpp" />
+    <ClCompile Include="CCalculCouple.cpp" />
     <ClCompile Include="CException.cpp" />
     <ClCompile Include="CGraphe.cpp" />
     <ClCompile Include="CGrapheOperation.cpp" />
@@ -150,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CArc.h" />
+    <ClInclude Include="CCalculCouple.h" />
     <ClInclude Include="CException.h" />
     <ClInclude Include="CGraphe.h" />
     <ClInclude Include="CSommet.h" />

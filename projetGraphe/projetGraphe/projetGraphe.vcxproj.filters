@@ -39,6 +39,9 @@
     <ClCompile Include="Parser.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="CCalculCouple.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CException.h">
@@ -52,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="CGraphe.h">
       <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="CCalculCouple.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
